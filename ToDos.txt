@@ -1,0 +1,42 @@
+Beim erledigen einen Haken dahinter setzen: ✅
+
+- Nutzer registrieren sich mit E-Mail
+
+- Datenbankanbindung
+
+- 1 Coin gratis bei Registrierung
+
+- PDFs können hochgeladen & mit Titel versehen werden
+
+- Vorschau der ersten Seite eines PDFs (optional)
+
+- PDFs können mit Coins gekauft werden
+
+- Voting-System (Daumen hoch/runter)
+
+- Coin-Vergabe bei gutem Score (z. B. ab +10 Upvotes)
+
+- Einfacher Adminbereich (z. B. Liste aller Nutzer & PDFs)
+
+- Kauf von Coins
+
+
+
+Genauere Aufteilung:
+
+- Registrierung & Login
+
+- Upload von PDF-Dateien (mit Vorschautitel & Beschreibung)
+
+- Speichern der PDFs (z. B. in Firebase Storage oder lokal)
+
+- Liste aller Spickzettel anzeigen
+
+- Vorschau (z. B. erste Seite mit PDF.js anzeigen)
+
+- Voting-System (Upvote/Downvote + Score-Anzeige)
+
+- Coinsystem (Coins verwalten, 1 Start-Coin, Coin-Abzug beim Kauf)
+
+- Coin-Vergabe für gut bewertete Spickzettel
+
