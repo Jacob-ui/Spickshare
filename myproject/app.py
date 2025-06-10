@@ -1,6 +1,5 @@
 import os
-from flask import Flask, redirect, url_for, render_template, request, jsonify, flash
-from flask_login import login_user, login_required, logout_user, current_user
+from flask import Flask, redirect, url_for, render_template, request, jsonify
 import db  # dein db.py Modul mit DB-Funktionen
 
 app = Flask(__name__)
@@ -15,39 +14,36 @@ app.config.from_mapping(
 app.cli.add_command(db.init_db)  # CLI-Befehl aus db.py
 app.teardown_appcontext(db.close_db_con)
 
-
+# Startseite
 @app.route('/')
-def index():
-    return render_template('index.html')
+def start():
+    return redirect(url_for('index'))
 
-    
-@app.route('/login/', methods = ['GET', 'POST'])
+@app.route('/index/')
+def index():
+    return render_template('index.html', eintraege=eintraege)
+
+
+@app.route('/login/')
 def login():
-    data = request.form
-    print(data)
     return render_template('login.html')
 
-@app.route('/register/', methods = ['GET', 'POST'])
+@app.route('/register/')
 def register():
-    if request.method == 'POST':
-        email = request.form.get('email')
-        username = request.form.get('username')
-        password1 = request.form.get('password1')
-        password2 = request.form.get('password2')
-
-        if password1 != password2:
-            flash ('Passwords do not match', category='error')
-        else:
-            flash ('Registration successful!', category='success')
-            # add user to users database
     return render_template('register.html')
 
+# Liste für Sheets (Mit Sheets sind die Einträge für die CheatSheets gemeint)
+eintraege = [
+    {'titel': 'Mathe Zusammenfassung', 'beschreibung': 'Inhalte für die Klausur', 'prof': 'Müller', 'score': '6'},
+    {'titel': 'Full-Stack Web Development', 'beschreibung': 'Wie erstelle ich eine Web-App', 'prof': 'Dr. Eck, Alexander', 'score': '10'}
+]
 
+
+# DB
 @app.route('/insert/sample')
 def run_insert_sample():
     db.insert_sample()
     return 'Database flushed and populated with some sample data.'
-
 
 if __name__ == '__main__':
     app.run(debug=True)

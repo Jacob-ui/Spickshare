@@ -9,8 +9,30 @@
 <body>
 <nav>
     <h1>Spickshare</h1>
-     <a href="{{ url_for('login') }}">Login</a> / <a href="{{ url_for('register') }}">Register</a>
+     <a href="{{ url_for('login') }}">
+        <button>Login</button>
+    </a>
+
+    <a href="{{ url_for('register') }}">
+        <button>Register</button>
+    </a>
 </nav>
+    <ul>
+        {% for eintrag in eintraege %}
+            <div class="eintrag">
+                <li>{{ eintrag.titel }} | {{ eintrag.beschreibung }} | {{ eintrag.prof }}</li>
+                <div class="buttons-links">
+                    <button>+</button>
+                    <button>-</button>
+                    <p>{{ eintrag.score }}</p>
+                </div>
+                    <div class="buttons-rechts">
+                    <button>Vorschau</button>
+                    <button>Download</button>
+                </div>
+            </div>
+        {% endfor %}
+    </ul>
 </body>
 
 </html>
