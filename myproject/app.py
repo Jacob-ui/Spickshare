@@ -17,7 +17,7 @@ app.teardown_appcontext(db.close_db_con)
 
 @app.route('/')
 def index():
-    return redirect(url_for('lists'))
+    return redirect(url_for('login'))
 
 
 @app.route('/lists/')
@@ -66,6 +66,10 @@ def list(id):
         return jsonify(list_data)
     else:
         return render_template('list.html', list=list_data)
+    
+@app.route('/login/')
+def login():
+    return render_template('login.html')
 
 
 @app.route('/insert/sample')

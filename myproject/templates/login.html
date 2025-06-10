@@ -1,0 +1,29 @@
+{% block TITLE %}Login{% endblock %}
+
+{% block HEADER %}
+    <h2>Login to SpickShare</h2>
+{% endblock %}
+
+{% block CONTENT %}
+    <form method="POST" action="{{ url_for('login') }}">
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit">Login</button>
+    </form>
+    
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+{% endblock %}
