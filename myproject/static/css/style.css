@@ -1,8 +1,11 @@
 body {
+    text-align: center;
     font-family: sans-serif;
     width: 850px;
     margin: 10px auto;
-    border: 2px solid #D50C2F;
+    border: 2px solid #292929;
+    border-radius: 18px;
+    border-width: 2px;
 }
 
 a {
@@ -41,10 +44,12 @@ form {
 }
 nav {
     background: #eee;
-    border-bottom: 2px solid #D50C2F;
+    border-bottom: 2px solid #292929;
     display: flex;
     align-items: center;
     padding: 0 5px;
+    border-top-left-radius:  18px;
+    border-top-right-radius: 18px;
 }
 nav h1 {
     font-size: x-large;
@@ -72,4 +77,13 @@ nav a {
 
 .buttons-rechts{
     float: right;
+}
+
+.eintrag{
+    border: rgb(133, 133, 133);
+    border-style: solid;
+    border-width: 1px;
+    padding: 10px;
+    border-radius: 18px;
+
 }

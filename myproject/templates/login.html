@@ -1,7 +1,12 @@
+<html>
+<head>
+    <title>Spickshare - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/logstyle.css') }}">
+</head>
 {% block title %}Login{% endblock %} {% block
 content %}
 <form method="POST">
-  <h3 align="center">Login to SpickShare</h3>
+  <h3>Login to SpickShare</h3>
   <div class="form-group">
     <label for="username">Username</label>
     <input
@@ -26,3 +31,4 @@ content %}
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 {% endblock %}
+</html>

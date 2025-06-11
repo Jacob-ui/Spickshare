@@ -1,7 +1,13 @@
+<html>
+  <head>
+    <title>Spickshare - Registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/logstyle.css') }}">
+</head>
+  <body>
 {% block title %}Register{% endblock %} {% block
 content %}
 <form method="POST">
-  <h3 textalign="center">Create a SpickShare Account</h3>
+  <h3>Create a SpickShare Account</h3>
   <div class="form-group">
     <label for="email">Email</label>
     <input
@@ -65,3 +71,5 @@ content %}
     {% endif %}
 {% endwith %}
 {% endblock %}
+  </body>
+</html>
