@@ -1,6 +1,6 @@
 # Dokumentation
 
-## Hierbei handelt es sich nur um die vorläufigen Ressourcen, welche wir verwenden (Gestaltung, ausarbeitung der Quellen, etc. wird über ein Word-Dokument gemacht)
+## Hierbei handelt es sich nur um die vorläufigen Ressourcen, welche wir verwenden (Gestaltung, Ausarbeitung der Quellen, etc. wird über ein Word-Dokument gemacht)
 12.05. Besprechung der Idee, Probleme und erste Lösungsansätze rausgefiltert, Erstellung und Austausch von Discord Kanälen und geteilter Word-Dateien zur Kommunikation, Ziele für das nächste Treffen besprochen (Einrichtung von Entwicklungsumgebung, GitHub und informieren über Python)
 
 14.05. Erfolgreiche Installation und Einrichtung von GitHub und Synchronisierung eines gemeinsamen Reponsitory, sowie die erste Erstellung von Projekten. Dazu diente unter anderem folgendes Video: https://www.youtube.com/watch?v=0jzjz4MZ4ZU&t=438s
