@@ -1,10 +1,8 @@
 # Projektdokumentation: Wetter-App
 
 ## Inhaltsverzeichnis
-- [Value Proposition](value-proposition.md)
 - [Datenmodell](data-model.md)
-- [UI-Screens](ui-screens.md)
-- [Teammitglieder](team.md)
+
 
 ---
 
