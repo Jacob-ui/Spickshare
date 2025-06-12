@@ -1,8 +1,4 @@
-<html>
-<head>
-    <title>Spickshare - Login</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/logstyle.css') }}">
-</head>
+{% extends "base.html" %}
 {% block title %}Login{% endblock %} {% block
 content %}
 <form method="POST">
@@ -31,4 +27,3 @@ content %}
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 {% endblock %}
-</html>
