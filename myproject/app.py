@@ -1,6 +1,7 @@
 import os
 from flask import Flask, redirect, url_for, render_template, request, jsonify, flash
-import db  # dein db.py Modul mit DB-Funktionen
+import db # dein db.py Modul mit DB-Funktionen
+from db import get_db_con, init_db
 
 app = Flask(__name__)
 
@@ -24,8 +25,21 @@ def index():
     return render_template('index.html', eintraege=eintraege)
 
 
-@app.route('/login/')
+@app.route('/login/', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        pw = request.form.get('password')
+
+        #db_con = get_db_con()
+        if not username or not pw:
+            flash('Please fill out both fields!', category = 'error')
+        #elif db.execute("SELECT id FROM users WHERE username = ? and pw = ?", (username, pw)).fetchone(): # überprüfen ob username und passwort übereinstimmen
+            #flash('Login successful', category = 'success')
+        #else:
+            #flash('Username or password is incorrect!', category = 'error')
+
+
     return render_template('login.html')
 
 @app.route('/register/', methods=['GET', 'POST'])
@@ -33,15 +47,29 @@ def register():
     if request.method == 'POST':
         email = request.form.get('email')
         username = request.form.get('username')
-        password1 = request.form.get('password1')
+        pw = request.form.get('password1')
         password2 = request.form.get('password2')
 
-        if password1 != password2:
+        #db_con = get_db_con()
+
+        if not email or not username or not pw or not password2:
+            flash('Please fill out all fields!', category = 'error')
+            return render_template('register.html')
+        if pw != password2: #Beiden Passwörter vergeleichen
             flash('Passwords must match!', category = 'error')
+            return render_template('register.html')
+        #elif db.execute("SELECT id FROM users WHERE username = ?", (username)).fetchone(): # überprüfen ob username schon existiert
+        #    flash('Username already exists!', category = 'error')
+        #    return render_template('register.html')
+        #elif db.execute("SELECT id FROM users WHERE email = ?", (email)).fetchone(): #überprüfen ob email schonmal verwendet wurde
+        #    flash('Email already registered!', category = 'error')   
+        #    return render_template('register.html')     
         else:
+            #db_con.execute("INSERT INTO users (username, pw, credits, userart, email) VALUES (?, ?, ?, ?, ?)", (username, pw, 0, 'not verified', email))
+            #db_con.commit()
             flash('Registration successful!', category = 'success')
             # add User to database
-
+            return render_template('register.html')
     return render_template('register.html')
 
 # Liste für Sheets (Mit Sheets sind die Einträge für die CheatSheets gemeint)
