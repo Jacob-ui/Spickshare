@@ -4,6 +4,8 @@
 - [Value proposition](value-proposition.md)
 - [Members](members.md)
 - [Database](db.md)
+- [Resources](resources.md)
+
 
 ---
 
