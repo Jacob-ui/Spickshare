@@ -7,7 +7,6 @@
 Des weiteren haben wir ein weiteres Youtube Tutorial über Flask und Python gefunden um die Datenbankanbindung herzustellen und um sich besser mit dem Aufbau von Web-Apps auszukennen:
 -   https://www.youtube.com/results?search_query=python+sqlite+tutorial+deutsch+web+app
 -   https://www.youtube.com/watch?v=362fjQdpFlc
--   https://www.youtube.com/watch?v=dam0GPOAvVI (Einführung in das Thema + Hilfe bei der Einlog/ Registrierungsseite)
 -   https://www.youtube.com/watch?v=gBpiToYbsDM&t (generelle Hilfe)
 
 
