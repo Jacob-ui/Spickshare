@@ -1,22 +1,22 @@
 # Database
 
-User
+### User
 •	Id (PK), pw (String), username (String), credits (Int), Userart(String), email(String)
 
-CheatSheet
+### CheatSheet
 •	Id (PK), Title (String), creditCosts (Int), pdf-datei (pdf), prof_id (FK), module_id (FK), user_id (FK), votes (Int)
 
-Votes
+### Votes
 •	Id (PK), User_Id (FK), CheatSheet_Id (FK), upvotes (Boolean), downvotes (Boolean)
 
-Orders
+### Orders
 •	Invoicenumber (PK), user_id (FK),  creditamount (int)
 
-UnlockedCheatSheet
+### UnlockedCheatSheet
 •	User_Id (FK), Cheatsheet_id (FK)
 
-Modules
+### Modules
 •	Id (PK), Name (String)
 
-Prof
+### Prof
 •	Id (PK), Module_ID (FK), Name (String)
