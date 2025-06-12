@@ -14,7 +14,7 @@ Des weiteren haben wir ein weiteres Youtube Tutorial über Flask und Python gefu
 
 - 05.06. Anlegen der Projektdateien 
 - 09.06. Aufteilung der Aufgaben bis zum 12.06. für den Status Quo. Cooper ergänzt Datenbanken + erstellt Registrierungs- + Einlogmöglichkeit 
-Jacob ergänz die Liste mit den Spickzettel Einträgen, fügt einen Funktionsfähigen Create Button hinzu und entwickelt falls der Zeitrahmen es zulässt, ggf. noch eine Sortierung mit Upvote(Downvote
+Jacob ergänz die Liste mit den Spickzettel Einträgen, fügt einen Funktionsfähigen Upvote/Downvote Button hinzu und entwickelt falls der Zeitrahmen es zulässt, ggf. noch eine Sortierung mit Upvote(Downvote)
 - 10.06.2025 https://www.youtube.com/watch?v=KIT4lgR3FWA 
 - 10.06.2025 Dynamic List https://www.youtube.com/watch?v=NO-H8z2tV4I
 - 11.06.2025 Like/Dislike Button https://www.youtube.com/watch?v=rX7B_SV2EC0
