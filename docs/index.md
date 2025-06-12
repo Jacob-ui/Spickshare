@@ -1,8 +1,9 @@
-# Projektdokumentation: Wetter-App
+# Projektdokumentation: Spickshare
 
 ## Inhaltsverzeichnis
-- [Datenmodell](data-model.md)
-
+- [Value proposition](value-proposition.md)
+- [Members](members.md)
+- [Database](db.md)
 
 ---
 
