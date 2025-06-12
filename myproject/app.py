@@ -1,5 +1,5 @@
 import os
-from flask import Flask, redirect, url_for, render_template, request, jsonify
+from flask import Flask, redirect, url_for, render_template, request, jsonify, flash
 import db  # dein db.py Modul mit DB-Funktionen
 
 app = Flask(__name__)
@@ -28,8 +28,20 @@ def index():
 def login():
     return render_template('login.html')
 
-@app.route('/register/')
+@app.route('/register/', methods=['GET', 'POST'])
 def register():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        username = request.form.get('username')
+        password1 = request.form.get('password1')
+        password2 = request.form.get('password2')
+
+        if password1 != password2:
+            flash('Passwords must match!', category = 'error')
+        else:
+            flash('Registration successful!', category = 'success')
+            # add User to database
+
     return render_template('register.html')
 
 # Liste für Sheets (Mit Sheets sind die Einträge für die CheatSheets gemeint)
