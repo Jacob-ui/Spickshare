@@ -5,7 +5,7 @@ nav_order: 4
 ---
 
 {: .label }
-[Jane Dane]
+Spickshare
 
 {: .no_toc }
 # Summary of individual contributions
@@ -17,14 +17,14 @@ nav_order: 4
 {: toc }
 </details>
 
-## [Jane Dane]
+## Cooper Woolley
 
 Contributions
 : Lorem ipsum dolor
 : Consetetur sadipscing elitr
 : ...
 
-## [Joe Doe]
+## Jacob Gotter
 
 Contributions
 : Diam nonumy eirmod
