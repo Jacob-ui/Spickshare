@@ -14,7 +14,7 @@ nav_order: 5
 - [Contributions](contributions.md)
 - [Goals](goals.md)
 - [peer-review](peer-review.md)
-- [Improvements](Improvements.md)
+- [Improvements](improvements.md)
 - [Database](db.md)
 
 

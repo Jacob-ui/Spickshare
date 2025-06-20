@@ -17,16 +17,14 @@ nav_order: 3
 {: toc }
 </details>
 
-## [team member] - review 1
+## Cooper Woolley - review 1
 
 ### My observation (Wahrnehmung)
 
-[A specific observation, regarding know-how, effectiveness, team work or from another relevant area]
+Cooper arbeitet sehr effektiv am Projekt, besonders an der Datenbank und bringt regelmäßig Vorschläge ein, die unser Ergebnis verbessern.
 
 ### Effect on me (Wirkung)
-
-[What positive or negative effect did this observation have on the reviewer?]
+Da ich mich auf Cooper sehr gut verlassen kann, ich mich parrallel um andere Bestandteile des Codes kümmern.
 
 ### Tip for the future (Wunsch)
-
-[What should be changed or strengthened for the point of view of the reviewer?]
+Ich wünsche mir, dass Cooper weiterhin  engagiert bleibt und wir uns bei unseren Codeteilen gegenseitig mehr unterstützen.

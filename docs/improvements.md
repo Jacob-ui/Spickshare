@@ -15,3 +15,12 @@ nav_order: 2
 + ToC
 {: toc }
 </details>
+
+## Verbesserung des Votes Systems
+
+: Bisher können unendlich viele Votes per Buttons hinzugefügt werden, diese sollen auf eine Interaktion beschränkt werden
+
+## Datenbank Lauffähig machen
+
+Goal Definition
+: Die Datenbank richtig initialisieren und mit Login/Registration, funktionsfähig machen
