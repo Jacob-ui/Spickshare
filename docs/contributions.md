@@ -20,13 +20,11 @@ Spickshare
 ## Cooper Woolley
 
 Contributions
-: Lorem ipsum dolor
-: Consetetur sadipscing elitr
+: Entwurf des Datenbankschemas  
 : ...
 
 ## Jacob Gotter
 
 Contributions
-: Diam nonumy eirmod
-: Tempor invidunt ut labore
+: Entwurf des Datenbankschemas  
 : ...

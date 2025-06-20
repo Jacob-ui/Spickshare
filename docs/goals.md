@@ -13,3 +13,13 @@ nav_order: 1
 + ToC
 {: toc }
 </details>
+
+## Goal 1
+
+Goal Definition
+: ...
+
+## Goal 2
+
+Goal Definition
+: ...
