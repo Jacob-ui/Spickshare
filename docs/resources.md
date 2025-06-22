@@ -18,4 +18,5 @@ Jacob ergänz die Liste mit den Spickzettel Einträgen, fügt einen Funktionsfä
 - 10.06.2025 https://www.youtube.com/watch?v=KIT4lgR3FWA 
 - 10.06.2025 Dynamic List https://www.youtube.com/watch?v=NO-H8z2tV4I
 - 11.06.2025 Like/Dislike Button https://www.youtube.com/watch?v=rX7B_SV2EC0
-- 12.06. Weiterentwicklung des Projektes wie dem Hinzufügen von SQL Abfragen bei Login/Registrierung und das Anlegen und Teilen der Projektdokumentation
+- 12.06.2025 Weiterentwicklung des Projektes wie dem Hinzufügen von SQL Abfragen bei Login/Registrierung und das Anlegen und Teilen der Projektdokumentation
+- 22.06.2025 https://www.youtube.com/watch?v=WBzB7VtH7-g SQLite Tutorial

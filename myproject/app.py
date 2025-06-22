@@ -5,10 +5,11 @@ from db import get_db_con, init_db
 
 app = Flask(__name__)
 
+
 # Konfiguration
 app.config.from_mapping(
     SECRET_KEY='secret_key_just_for_dev_environment',
-    DATABASE=os.path.join(app.instance_path, 'spickshare.sqlite')
+    DATABASE=os.path.join(os.path.dirname(__file__), 'spickshare.db') 
 )
 
 # DB initialisieren
@@ -24,53 +25,61 @@ def start():
 def index():
     return render_template('index.html', eintraege=eintraege)
 
-
+#Login:
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
+    error_msg = None
     if request.method == 'POST':
         username = request.form.get('username')
         pw = request.form.get('password')
 
-        #db_con = get_db_con()
         if not username or not pw:
-            flash('Please fill out both fields!', category = 'error')
-        #elif db.execute("SELECT id FROM users WHERE username = ? and pw = ?", (username, pw)).fetchone(): # überprüfen ob username und passwort übereinstimmen
-            #flash('Login successful', category = 'success')
-        #else:
-            #flash('Username or password is incorrect!', category = 'error')
+            error_msg = 'Please fill out both fields!'
+        else:
+            db_con = get_db_con()
+            user = db_con.execute(
+                "SELECT * FROM users WHERE username = ? AND pw = ?",
+                (username, pw)
+            ).fetchone()
+            if user:
+                return redirect(url_for('index'))
+            else:
+                error_msg = 'Username or password incorrect!'
+
+    return render_template('login.html', error=error_msg)
 
 
-    return render_template('login.html')
-
+# Registrierung:
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
+    message = None
+
     if request.method == 'POST':
         email = request.form.get('email')
         username = request.form.get('username')
-        pw = request.form.get('password1')
-        password2 = request.form.get('password2')
+        pw = request.form.get('password')
 
-        #db_con = get_db_con()
-
-        if not email or not username or not pw or not password2:
-            flash('Please fill out all fields!', category = 'error')
-            return render_template('register.html')
-        if pw != password2: #Beiden Passwörter vergeleichen
-            flash('Passwords must match!', category = 'error')
-            return render_template('register.html')
-        #elif db.execute("SELECT id FROM users WHERE username = ?", (username)).fetchone(): # überprüfen ob username schon existiert
-        #    flash('Username already exists!', category = 'error')
-        #    return render_template('register.html')
-        #elif db.execute("SELECT id FROM users WHERE email = ?", (email)).fetchone(): #überprüfen ob email schonmal verwendet wurde
-        #    flash('Email already registered!', category = 'error')   
-        #    return render_template('register.html')     
+        if not email or not username or not pw:
+            message = 'Bitte fülle alle Felder aus.'
         else:
-            #db_con.execute("INSERT INTO users (username, pw, credits, userart, email) VALUES (?, ?, ?, ?, ?)", (username, pw, 0, 'not verified', email))
-            #db_con.commit()
-            flash('Registration successful!', category = 'success')
-            # add User to database
-            return render_template('register.html')
-    return render_template('register.html')
+            db_con = get_db_con()
+            user_exists = db_con.execute(
+                'SELECT id FROM users WHERE username = ? OR email = ?',
+                (username, email)
+            ).fetchone()
+            if user_exists:
+                message = 'Benutzername oder E-Mail existiert bereits.'
+            else:
+                db_con.execute(
+                    "INSERT INTO users (username, pw, credits, userart, email) VALUES (?, ?, ?, ?, ?)",
+                    (username, pw, 0, 'not verified', email)
+                )
+                db_con.commit()
+                # Nach erfolgreicher Registrierung weiterleiten:
+                return render_template('login.html', message="Registrierung erfolgreich! Bitte einloggen.")
+
+    return render_template('register.html', message=message)
+
 
 # Liste für Sheets (Mit Sheets sind die Einträge für die CheatSheets gemeint)
 eintraege = [
