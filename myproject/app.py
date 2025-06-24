@@ -9,7 +9,7 @@ app = Flask(__name__)
 # Konfiguration
 app.config.from_mapping(
     SECRET_KEY='secret_key_just_for_dev_environment',
-    DATABASE=os.path.join(os.path.dirname(__file__), 'spickshare.db') 
+    DATABASE=os.path.join(app.instance_path, 'spickshare.db') 
 )
 
 # DB initialisieren
