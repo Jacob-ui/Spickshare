@@ -5,6 +5,11 @@ from flask import current_app, g
 
 def get_db_con():
     if 'db_con' not in g:
+        db_path = current_app.config['DATABASE'] #
+        db_dir = os.path.dirname(db_path) #
+        if not os.path.exists(db_dir): #
+            os.makedirs(db_dir) #
+
         g.db_con = sqlite3.connect(
             current_app.config['DATABASE'],
             detect_types=sqlite3.PARSE_DECLTYPES
@@ -21,6 +26,10 @@ def close_db_con(e=None):
 @click.command('init-db')
 def init_db():
     db_path = current_app.config['DATABASE']
+
+    db_dir = os.path.dirname(db_path) #
+    if not os.path.exists(db_dir): #
+        os.makedirs(db_dir) #
     
     # Alte DB entfernen
     if os.path.exists(db_path):
