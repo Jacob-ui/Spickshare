@@ -16,6 +16,8 @@ app.config.from_mapping(
 app.cli.add_command(db.init_db)  # CLI-Befehl aus db.py
 app.teardown_appcontext(db.close_db_con)
 
+print("Instance path:", app.instance_path)
+print("Database path:", app.config['DATABASE'])
 # Startseite
 @app.route('/')
 def start():
@@ -26,7 +28,7 @@ def index():
     return render_template('index.html', eintraege=eintraege)
 
 #Login:
-@app.route('/login/', methods=['GET', 'POST'])
+@app.route('/login/', methods=['GET', 'POST']) #https://youtu.be/dam0GPOAvVI?t=3449 für die GET und POST Teile des Codes
 def login():
     error_msg = None
     if request.method == 'POST':
@@ -50,7 +52,7 @@ def login():
 
 
 # Registrierung:
-@app.route('/register/', methods=['GET', 'POST'])
+@app.route('/register/', methods=['GET', 'POST']) #
 def register():
     message = None
 
@@ -58,9 +60,12 @@ def register():
         email = request.form.get('email')
         username = request.form.get('username')
         pw = request.form.get('password')
+        pw2 = request.form.get('password2')
 
-        if not email or not username or not pw:
+        if not email or not username or not pw or not pw2:
             message = 'Bitte fülle alle Felder aus.'
+        elif pw != pw2:
+            message = 'Passwörter stimmen nicht überein!' 
         else:
             db_con = get_db_con()
             user_exists = db_con.execute(
@@ -80,6 +85,9 @@ def register():
 
     return render_template('register.html', message=message)
 
+@app.route("/logout")
+def logout():
+    return redirect(url_for('index'))
 
 # Liste für Sheets (Mit Sheets sind die Einträge für die CheatSheets gemeint)
 eintraege = [

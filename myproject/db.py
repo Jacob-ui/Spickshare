@@ -33,6 +33,8 @@ def init_db():
     with db_con:
         with current_app.open_resource('sql/create_tables.sql') as f:
             db_con.executescript(f.read().decode('utf-8'))
+        with current_app.open_resource('sql/insert_sample.sql') as f:
+            db_con.executescript(f.read().decode('utf-8'))
         
         # Überprüfen ob alles geklappt hat
         tables = db_con.execute("SELECT name FROM sqlite_master").fetchall()
