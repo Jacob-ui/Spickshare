@@ -2,6 +2,7 @@ import os
 from flask import Flask, redirect, url_for, render_template, request, jsonify, flash
 import db # dein db.py Modul mit DB-Funktionen
 from db import get_db_con, init_db
+from werkzeug.security import generate_password_hash, check_password_hash #https://youtu.be/dam0GPOAvVI?t=5750
 
 app = Flask(__name__, instance_relative_config=True) #https://claude.ai/share/644c973d-59db-4614-8e57-cf71e15b4903 to fix multiple instance folder bug
 
@@ -71,6 +72,7 @@ def register():
         pw = request.form.get('password')
         pw2 = request.form.get('password2')
 
+
         if not email or not username or not pw or not pw2:
             message = 'Bitte fülle alle Felder aus.'
         elif pw != pw2:
@@ -87,7 +89,7 @@ def register():
                 else:
                     db_con.execute(
                         "INSERT INTO users (username, pw, credits, userart, email) VALUES (?, ?, ?, ?, ?)",
-                        (username, pw, 0, 'not verified', email)
+                        (username, generate_password_hash(pw), 0, 'not verified', email)
                     )
                     db_con.commit()
                     # Nach erfolgreicher Registrierung weiterleiten:
