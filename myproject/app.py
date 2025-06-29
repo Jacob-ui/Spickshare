@@ -3,6 +3,7 @@ from flask import Flask, redirect, url_for, render_template, request, jsonify, f
 import db # dein db.py Modul mit DB-Funktionen
 from db import get_db_con, init_db
 from werkzeug.security import generate_password_hash, check_password_hash #https://youtu.be/dam0GPOAvVI?t=5750
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user #https://youtu.be/dam0GPOAvVI?t=6589
 
 app = Flask(__name__, instance_relative_config=True) #https://claude.ai/share/644c973d-59db-4614-8e57-cf71e15b4903 to fix multiple instance folder bug
 
@@ -28,6 +29,14 @@ app.teardown_appcontext(db.close_db_con)
 
 print("Instance path:", app.instance_path)
 print("Database path:", app.config['DATABASE'])
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(id))
+
 # Startseite
 @app.route('/')
 def start():
@@ -50,11 +59,12 @@ def login():
         else:
             db_con = get_db_con()
             user = db_con.execute(
-                "SELECT * FROM users WHERE username = ? AND pw = ?",
-                (username, pw)
+                "SELECT * FROM users WHERE username = ?",
+                (username,)
             ).fetchone()
-            if user:
-                return redirect(url_for('index'))
+            if user and check_password_hash(user['pw'], pw): #https://youtu.be/dam0GPOAvVI?t=6355
+                    login_user(user, remember=True)
+                    return redirect(url_for('index'))
             else:
                 error_msg = 'Username or password incorrect!'
 
@@ -78,7 +88,7 @@ def register():
         elif pw != pw2:
             message = 'Passwörter stimmen nicht überein!' 
         else:
-            try: #
+            try: 
                 db_con = get_db_con()
                 user_exists = db_con.execute(
                     'SELECT id FROM users WHERE username = ? OR email = ?',
@@ -94,13 +104,15 @@ def register():
                     db_con.commit()
                     # Nach erfolgreicher Registrierung weiterleiten:
                     return render_template('login.html', message="Registrierung erfolgreich! Bitte einloggen.")
-            except Exception as e: #
-                message = f'Database error: {str(e)}' #
+            except Exception as e: 
+                message = f'Database error: {str(e)}'
 
     return render_template('register.html', message=message)
 
 @app.route("/logout")
+@login_required #https://youtu.be/dam0GPOAvVI?t=6715
 def logout():
+    logout_user()
     return redirect(url_for('index'))
 
 # Liste für Sheets (Mit Sheets sind die Einträge für die CheatSheets gemeint)
