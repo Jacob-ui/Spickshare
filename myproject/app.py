@@ -40,7 +40,6 @@ def index():
 #Login:
 @app.route('/login/', methods=['GET', 'POST']) #https://youtu.be/dam0GPOAvVI?t=3449 für die GET und POST Teile des Codes
 def login():
-    error_msg = None
     if request.method == 'POST':
         username = request.form.get('username')
         pw = request.form.get('password')
@@ -53,19 +52,17 @@ def login():
                 "SELECT * FROM users WHERE username = ? AND pw = ?",
                 (username, pw)
             ).fetchone()
-            if user:
+            if user and check_password_hash(user['pw'], pw):
                 return redirect(url_for('index'))
             else:
-                error_msg = 'Username or password incorrect!'
+                flash('Username or password incorrect!', 'error')
 
-    return render_template('login.html', error=error_msg)
+    return render_template('login.html')
 
 
 # Registrierung:
 @app.route('/register/', methods=['GET', 'POST']) #
 def register():
-    message = None
-
     if request.method == 'POST':
         email = request.form.get('email')
         username = request.form.get('username')
@@ -74,9 +71,9 @@ def register():
 
 
         if not email or not username or not pw or not pw2:
-            message = 'Bitte fülle alle Felder aus.'
+            flash('Bitte fülle alle Felder aus.', 'error')
         elif pw != pw2:
-            message = 'Passwörter stimmen nicht überein!' 
+            flash('Passwörter stimmen nicht überein!', 'error')
         else:
             try: #
                 db_con = get_db_con()
@@ -93,11 +90,12 @@ def register():
                     )
                     db_con.commit()
                     # Nach erfolgreicher Registrierung weiterleiten:
-                    return render_template('login.html', message="Registrierung erfolgreich! Bitte einloggen.")
+                    flash("Registrierung erfolgreich! Bitte einloggen.", "success")
+                    return redirect(url_for('login'))
             except Exception as e: #
-                message = f'Database error: {str(e)}' #
+                flash(f'Database error: {str(e)}', 'error') #
 
-    return render_template('register.html', message=message)
+    return render_template('register.html')
 
 @app.route("/logout")
 def logout():
