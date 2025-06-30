@@ -1,9 +1,9 @@
 import os
 from flask import Flask, redirect, url_for, render_template, request, jsonify, flash
-import db # dein db.py Modul mit DB-Funktionen
-from db import get_db_con, init_db
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash #https://youtu.be/dam0GPOAvVI?t=5750
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user #https://youtu.be/dam0GPOAvVI?t=6589
+from models import User, db
 
 app = Flask(__name__, instance_relative_config=True) #https://claude.ai/share/644c973d-59db-4614-8e57-cf71e15b4903 to fix multiple instance folder bug
 
@@ -11,11 +11,12 @@ app = Flask(__name__, instance_relative_config=True) #https://claude.ai/share/64
 # Konfiguration
 app.config.from_mapping(
     SECRET_KEY='secret_key_just_for_dev_environment',
-    DATABASE=os.path.join(app.instance_path, 'spickshare.db') 
+    SQLALCHEMY_DATABASE_URI=f'sqlite:///{os.path.join(app.instance_path, "spickshare.db")}',
+    SQLALCHEMY_TRACK_MODIFICATIONS=False 
 )
 
 app.instance_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'instance') #https://claude.ai/share/644c973d-59db-4614-8e57-cf71e15b4903 to fix multiple instance folder bug
-app.config['DATABASE'] = os.path.join(app.instance_path, 'spickshare.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(app.instance_path, "spickshare.db")}'
 
 #Schauen ob DB existiert
 try:
@@ -24,18 +25,23 @@ except OSError:
     pass
 
 # DB initialisieren
-app.cli.add_command(db.init_db)  # CLI-Befehl aus db.py
-app.teardown_appcontext(db.close_db_con)
+db.init_app(app)
 
-print("Instance path:", app.instance_path)
-print("Database path:", app.config['DATABASE'])
-
-login_manager = LoginManager()
+login_manager = LoginManager() #https://youtu.be/dam0GPOAvVI?t=6784
 login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(id))
+    return User.query.get(int(user_id))
+
+print("Instance path:", app.instance_path)
+print("Database path:", app.config['SQLALCHEMY_DATABASE_URI'])
+
+# Liste für Sheets (Mit Sheets sind die Einträge für die CheatSheets gemeint)
+eintraege = [
+    {'id': '0', 'titel': 'Mathe Zusammenfassung', 'beschreibung': 'Inhalte für die Klausur', 'prof': 'Müller', 'score': '6'},
+    {'id': '1', 'titel': 'Full-Stack Web Development', 'beschreibung': 'Wie erstelle ich eine Web-App', 'prof': 'Dr. Eck, Alexander', 'score': '10'}
+]
 
 # Startseite
 @app.route('/')
@@ -44,7 +50,7 @@ def start():
 
 @app.route('/index/')
 def index():
-    return render_template('index.html', eintraege=eintraege)
+    return render_template('index.html', eintraege=eintraege, user=current_user) #https://youtu.be/dam0GPOAvVI?t=7011
 
 #Login:
 @app.route('/login/', methods=['GET', 'POST']) #https://youtu.be/dam0GPOAvVI?t=3449 für die GET und POST Teile des Codes
@@ -56,12 +62,9 @@ def login():
         if not username or not pw:
             error_msg = 'Please fill out both fields!'
         else:
-            db_con = get_db_con()
-            user = db_con.execute(
-                "SELECT * FROM users WHERE username = ?",
-                (username,)
-            ).fetchone()
-            if user and check_password_hash(user['pw'], pw):
+            user = User.query.filter_by(username=username).first()
+            if user and check_password_hash(user.pw, pw):
+                login_user(user)
                 return redirect(url_for('index'))
             else:
                 flash('Username or password incorrect!', 'error')
@@ -85,24 +88,27 @@ def register():
             flash('Passwörter stimmen nicht überein!', 'error')
         else:
             try: 
-                db_con = get_db_con()
-                user_exists = db_con.execute(
-                    'SELECT id FROM users WHERE username = ? OR email = ?',
-                    (username, email)
-                ).fetchone()
+                user_exists = User.query.filter(
+                    (User.username == username) | (User.email == email)
+                ).first()
                 if user_exists:
-                    message = 'Benutzername oder E-Mail existiert bereits.'
+                    flash('Benutzername oder E-Mail existiert bereits.','error')
                 else:
-                    db_con.execute(
-                        "INSERT INTO users (username, pw, credits, userart, email) VALUES (?, ?, ?, ?, ?)",
-                        (username, generate_password_hash(pw), 0, 'not verified', email)
+                    new_user = User(
+                        username=username,
+                        pw=generate_password_hash(pw),
+                        email=email,
+                        credits=0,
+                        userart='not verified'
                     )
-                    db_con.commit()
-                    # Nach erfolgreicher Registrierung weiterleiten:
-                    flash("Registrierung erfolgreich! Bitte einloggen.", "success")
+                    db.session.add(new_user)
+                    db.session.commit()
+                    
+                    flash('Registrierung erfolgreich! Bitte einloggen.', 'success')
                     return redirect(url_for('login'))
-            except Exception as e: #
-                flash(f'Database error: {str(e)}', 'error') #
+            except Exception as e:
+                db.session.rollback()
+                flash(f'Database error: {str(e)}', 'error')
 
     return render_template('register.html')
 
@@ -112,14 +118,9 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-# Liste für Sheets (Mit Sheets sind die Einträge für die CheatSheets gemeint)
-eintraege = [
-    {'id': '0', 'titel': 'Mathe Zusammenfassung', 'beschreibung': 'Inhalte für die Klausur', 'prof': 'Müller', 'score': '6'},
-    {'id': '1', 'titel': 'Full-Stack Web Development', 'beschreibung': 'Wie erstelle ich eine Web-App', 'prof': 'Dr. Eck, Alexander', 'score': '10'}
-]
-
 # Voting +/-
 @app.route("/vote", methods=["POST"])
+@login_required
 def vote():
     eintrag_id = request.form.get('id') # fragt id vom sheet an
     vote_input = request.form.get('Voteinput') # liest aus index den +/- Button aus
@@ -137,10 +138,29 @@ def vote():
 
 
 # DB
+@app.route('/create-tables')
+def create_tables():
+    with app.app_context():
+        db.create_all()
+    return 'Database tables created!'
+
 @app.route('/insert/sample')
-def run_insert_sample():
-    db.insert_sample()
-    return 'Database flushed and populated with some sample data.'
+def insert_sample():
+    try:
+        if User.query.first():
+            return 'Daten existieren bereits!'
+        user1 = User(email="cooperwoolley@gmail.com", username="Cooper", pw=generate_password_hash("Cooper"), credits=100, userart="admin")
+        user2 = User(email="jacobgotter@gmail.com", username="Jacob", pw=generate_password_hash("Jacob"), credits=101, userart="admin")
+
+        db.session.add_all([user1, user2])
+        db.session.commit()
+
+        return 'Daten erfolgreich implementiert!'
+    except Exception as e:
+        db.session.rollback()
+        return f'Error inserting sample data: {str(e)}'
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)

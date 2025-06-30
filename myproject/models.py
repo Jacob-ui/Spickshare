@@ -1,6 +1,8 @@
-from . import db
 from flask_login import UserMixin #https://youtu.be/dam0GPOAvVI?t=4993
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func #Könnten damit speichern, wann ein Spickzettel hochgeladen wurde
+
+db = SQLAlchemy()
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -28,6 +30,7 @@ class Cheatsheet(db.Model):
     professor_id = db.Column(db.Integer, db.ForeignKey('professor.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     votes = db.Column(db.Integer, default=0, nullable=False )
+    created_at = db.Column(db.DateTime, default=func.now())
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
