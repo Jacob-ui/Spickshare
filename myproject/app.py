@@ -118,6 +118,8 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+#CheatSheet DB
+
 # Voting +/-
 @app.route("/vote", methods=["POST"])
 @login_required

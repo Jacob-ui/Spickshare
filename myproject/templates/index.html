@@ -8,8 +8,14 @@
 
 <body>
 <nav>
+    
+<div class="form-section">
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="File" name="file">
+        <input type="submit" value="Upload">
+    </form>
+</div>
     {% if user.is_authenticated %}
-        <h1>Spickshare</h1>
         <a href="{{ url_for('logout') }}">
             <button>Logout</button>
         </a>
