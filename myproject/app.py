@@ -119,6 +119,10 @@ def logout():
     return redirect(url_for('index'))
 
 #CheatSheet DB
+@app.route("/upload")
+def upload():
+    return render_template('upload.html')
+    
 
 # Voting +/-
 @app.route("/vote", methods=["POST"])
