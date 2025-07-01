@@ -24,13 +24,14 @@ class Professor(db.Model):
 class Cheatsheet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
-    creditcost = db.Column(db.Integer, nullable=False)
-    pdf_datei = db.Column(db.String, nullable=False)
-    module_id = db.Column(db.Integer, db.ForeignKey('module.id'), nullable=False)
-    professor_id = db.Column(db.Integer, db.ForeignKey('professor.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    votes = db.Column(db.Integer, default=0, nullable=False )
+    creditcost = db.Column(db.Integer, nullable=True)
+    pdf_datei = db.Column(db.LargeBinary, nullable=False)
+    module_id = db.Column(db.Integer, db.ForeignKey('module.id'), nullable=True)
+    professor_id = db.Column(db.Integer, db.ForeignKey('professor.id'), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    votes = db.Column(db.Integer, default=0, nullable=False)
     created_at = db.Column(db.DateTime, default=func.now())
+
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
