@@ -3,6 +3,17 @@
     <title>Upload CheatSheet</title>
 </head>
 <body>
+    <div class="upload-cheatsheet">
+        <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+            <label for="title">Titel:</label>
+            <input type="text" name="title" id="title" required>
 
+            <label for="file">PDF-Datei:</label>
+            <input type="file" name="file" id="file" accept=".pdf" required>
+
+            <button type="submit">Hochladen</button>
+        </form>
+
+    </div>
 </body>
 </html>

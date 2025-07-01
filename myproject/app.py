@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash #https://youtu.be/dam0GPOAvVI?t=5750
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user #https://youtu.be/dam0GPOAvVI?t=6589
 from models import User, db
+from models import Cheatsheet
 
 app = Flask(__name__, instance_relative_config=True) #https://claude.ai/share/644c973d-59db-4614-8e57-cf71e15b4903 to fix multiple instance folder bug
 
@@ -118,11 +119,43 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-#CheatSheet DB
-@app.route("/upload")
-def upload():
-    return render_template('upload.html')
     
+#upload cheatsheets with html input https://www.youtube.com/watch?v=GQLRVhXnZkE&t=127s bis 4:40 und https://www.youtube.com/watch?v=pPSZpCVRbvQ gesamt
+@app.route('/upload/', methods=['GET', 'POST'])
+@login_required
+def upload():
+    if request.method == 'GET':
+        # Nur das Uploadformular anzeigen
+        return render_template('upload.html')
+
+    # POST: Daten verarbeiten
+    file = request.files.get('file')
+    title = request.form.get('title')
+
+    if not file or file.filename == '':
+        flash("Keine Datei ausgewählt!", "error")
+        return redirect(url_for('upload'))
+
+    if not title:
+        flash("Titel darf nicht leer sein.", "error")
+        return redirect(url_for('upload'))
+
+    try:
+        new_sheet = Cheatsheet(
+            title=title,
+            pdf_datei=file.read(),
+            user_id=current_user.id
+        )
+        db.session.add(new_sheet)
+        db.session.commit()
+
+        flash(f"Upload erfolgreich: {file.filename}", "success")
+        return redirect(url_for('index'))
+
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Fehler beim Hochladen: {str(e)}", "error")
+        return redirect(url_for('upload'))
 
 # Voting +/-
 @app.route("/vote", methods=["POST"])
