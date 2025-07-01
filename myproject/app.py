@@ -38,12 +38,6 @@ def load_user(user_id):
 print("Instance path:", app.instance_path)
 print("Database path:", app.config['SQLALCHEMY_DATABASE_URI'])
 
-# Liste für Sheets (Mit Sheets sind die Einträge für die CheatSheets gemeint)
-eintraege = [
-    {'id': '0', 'titel': 'Mathe Zusammenfassung', 'beschreibung': 'Inhalte für die Klausur', 'prof': 'Müller', 'score': '6'},
-    {'id': '1', 'titel': 'Full-Stack Web Development', 'beschreibung': 'Wie erstelle ich eine Web-App', 'prof': 'Dr. Eck, Alexander', 'score': '10'}
-]
-
 # Startseite
 @app.route('/')
 def start():
@@ -51,6 +45,19 @@ def start():
 
 @app.route('/index/')
 def index():
+    cheatsheets = Cheatsheet.query.all()
+    
+    # Optional: Cheatsheets als Liste von Dictionaries vorbereiten für das Template
+    eintraege = []
+    for sheet in cheatsheets:
+        eintraege.append({
+            'id': sheet.id,
+            'titel': sheet.title,
+            'beschreibung': 'Beschreibung hier einfügen oder weglassen',  # Falls du ein Feld hast, sonst leer
+            'prof': '',  # Falls du Professor-Name aus sheet.professor_id laden willst, musst du noch joinen
+            'score': str(sheet.votes),
+        })
+    
     return render_template('index.html', eintraege=eintraege, user=current_user) #https://youtu.be/dam0GPOAvVI?t=7011
 
 #Login:
