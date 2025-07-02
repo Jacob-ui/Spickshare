@@ -45,20 +45,8 @@ def start():
 
 @app.route('/index/')
 def index():
-    cheatsheets = Cheatsheet.query.all()
-    
-    # Optional: Cheatsheets als Liste von Dictionaries vorbereiten für das Template
-    eintraege = []
-    for sheet in cheatsheets:
-        eintraege.append({
-            'id': sheet.id,
-            'titel': sheet.title,
-            'beschreibung': sheet.description,
-            'prof': '',  # Falls du Professor-Name aus sheet.professor_id laden willst, musst du noch joinen
-            'score': str(sheet.votes),
-        })
-    
-    return render_template('index.html', eintraege=eintraege, user=current_user) #https://youtu.be/dam0GPOAvVI?t=7011
+    cheatsheets = Cheatsheet.query.all()    
+    return render_template('index.html', cheatsheets=cheatsheets, user=current_user) #https://youtu.be/dam0GPOAvVI?t=7011
 
 #Login:
 @app.route('/login/', methods=['GET', 'POST']) #https://youtu.be/dam0GPOAvVI?t=3449 für die GET und POST Teile des Codes
@@ -68,14 +56,14 @@ def login():
         pw = request.form.get('password')
 
         if not username or not pw:
-            error_msg = 'Please fill out both fields!'
+            flash('Please fill out both fields!')
         else:
             user = User.query.filter_by(username=username).first()
             if user and check_password_hash(user.pw, pw):
                 login_user(user)
                 return redirect(url_for('index'))
             else:
-                flash('Username or password incorrect!', 'error')
+                flash('Username or password incorrect!')
 
     return render_template('login.html')
 
@@ -91,16 +79,16 @@ def register():
 
 
         if not email or not username or not pw or not pw2:
-            flash('Bitte fülle alle Felder aus.', 'error')
+            flash('Bitte fülle alle Felder aus.')
         elif pw != pw2:
-            flash('Passwörter stimmen nicht überein!', 'error')
+            flash('Passwörter stimmen nicht überein!')
         else:
             try: 
                 user_exists = User.query.filter(
                     (User.username == username) | (User.email == email)
                 ).first()
                 if user_exists:
-                    flash('Benutzername oder E-Mail existiert bereits.','error')
+                    flash('Benutzername oder E-Mail existiert bereits.')
                 else:
                     new_user = User(
                         username=username,
@@ -116,7 +104,7 @@ def register():
                     return redirect(url_for('login'))
             except Exception as e:
                 db.session.rollback()
-                flash(f'Database error: {str(e)}', 'error')
+                flash(f'Database error: {str(e)}')
 
     return render_template('register.html')
 
@@ -145,15 +133,15 @@ def upload():
         return redirect(url_for('upload'))
 
     if not title:
-        flash("Titel darf nicht leer sein.", "error")
+        flash("Titel darf nicht leer sein.")
         return redirect(url_for('upload'))
     
     if not description:
-        flash("Beschreibung darf nicht leer sein.", "error")
+        flash("Beschreibung darf nicht leer sein.")
         return redirect(url_for('upload'))
     
     if not file.filename.lower().endswith('.pdf'):
-        flash("Nur PDF-Dateien sind erlaubt.", "error")
+        flash("Nur PDF-Dateien sind erlaubt.")
         return redirect(url_for('upload'))
 
     try:
@@ -171,25 +159,30 @@ def upload():
 
     except Exception as e:
         db.session.rollback()
-        flash(f"Fehler beim Hochladen: {str(e)}", "error")
+        flash(f"Fehler beim Hochladen: {str(e)}")
         return redirect(url_for('upload'))
 
 # Voting +/-
 @app.route("/vote", methods=["POST"])
 @login_required
 def vote():
-    eintrag_id = request.form.get('id') # fragt id vom sheet an
+    cheatsheet_id = request.form.get('id') # fragt id vom sheet an
     vote_input = request.form.get('Voteinput') # liest aus index den +/- Button aus
-    for eintrag in eintrag:
-        if eintrag['id'] == eintrag_id:
-            score = int(eintrag['score'])
-            if vote_input == '+':
-                score +=1
-            elif vote_input == '-':
-                score -=1
-            eintrag['score'] = str(score) # speichert score
-            break
-    return render_template('index.html', eintraege=eintrag)
+    cheatsheet = Cheatsheet.query.get(cheatsheet_id)
+    if not cheatsheet:
+        flash('Cheatsheet nicht gefunden.')
+        return redirect(url_for('index'))
+    if vote_input == '+':
+        cheatsheet.votes += 1
+    elif vote_input == '-':
+        cheatsheet.votes -= 1
+    else:
+        flash('Ungültiger Vote!')
+        return redirect(url_for('index'))
+
+    db.session.commit()
+    flash('Danke für deine Stimme!', 'success')
+    return redirect(url_for('index'))
 
 
 
