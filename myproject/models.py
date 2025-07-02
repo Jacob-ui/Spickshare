@@ -24,6 +24,7 @@ class Professor(db.Model):
 class Cheatsheet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
+    description = db.Column(db.String, nullable=False)
     creditcost = db.Column(db.Integer, nullable=True)
     pdf_datei = db.Column(db.LargeBinary, nullable=False)
     module_id = db.Column(db.Integer, db.ForeignKey('module.id'), nullable=True)

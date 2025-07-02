@@ -53,7 +53,7 @@ def index():
         eintraege.append({
             'id': sheet.id,
             'titel': sheet.title,
-            'beschreibung': 'Beschreibung hier einfügen oder weglassen',  # Falls du ein Feld hast, sonst leer
+            'beschreibung': sheet.description,
             'prof': '',  # Falls du Professor-Name aus sheet.professor_id laden willst, musst du noch joinen
             'score': str(sheet.votes),
         })
@@ -138,6 +138,7 @@ def upload():
     # POST: Daten verarbeiten
     file = request.files.get('file')
     title = request.form.get('title')
+    description = request.form.get('description')
 
     if not file or file.filename == '':
         flash("Keine Datei ausgewählt!", "error")
@@ -147,6 +148,10 @@ def upload():
         flash("Titel darf nicht leer sein.", "error")
         return redirect(url_for('upload'))
     
+    if not description:
+        flash("Beschreibung darf nicht leer sein.", "error")
+        return redirect(url_for('upload'))
+    
     if not file.filename.lower().endswith('.pdf'):
         flash("Nur PDF-Dateien sind erlaubt.", "error")
         return redirect(url_for('upload'))
@@ -154,6 +159,7 @@ def upload():
     try:
         new_sheet = Cheatsheet(
             title=title,
+            description=description,
             pdf_datei=file.read(),
             user_id=current_user.id
         )
