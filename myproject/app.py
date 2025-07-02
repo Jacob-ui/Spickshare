@@ -148,8 +148,8 @@ def upload():
         return redirect(url_for('upload'))
     
     if not file.filename.lower().endswith('.pdf'):
-    flash("Nur PDF-Dateien sind erlaubt.", "error")
-    return redirect(url_for('upload'))
+        flash("Nur PDF-Dateien sind erlaubt.", "error")
+        return redirect(url_for('upload'))
 
     try:
         new_sheet = Cheatsheet(
