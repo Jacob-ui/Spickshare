@@ -174,7 +174,7 @@ def upload():
 def vote():
     eintrag_id = request.form.get('id') # fragt id vom sheet an
     vote_input = request.form.get('Voteinput') # liest aus index den +/- Button aus
-    for eintrag in eintraege:
+    for eintrag in eintrag:
         if eintrag['id'] == eintrag_id:
             score = int(eintrag['score'])
             if vote_input == '+':
@@ -183,7 +183,7 @@ def vote():
                 score -=1
             eintrag['score'] = str(score) # speichert score
             break
-    return render_template('index.html', eintraege=eintraege)
+    return render_template('index.html', eintraege=eintrag)
 
 
 
