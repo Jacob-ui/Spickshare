@@ -146,6 +146,10 @@ def upload():
     if not title:
         flash("Titel darf nicht leer sein.", "error")
         return redirect(url_for('upload'))
+    
+    if not file.filename.lower().endswith('.pdf'):
+    flash("Nur PDF-Dateien sind erlaubt.", "error")
+    return redirect(url_for('upload'))
 
     try:
         new_sheet = Cheatsheet(
