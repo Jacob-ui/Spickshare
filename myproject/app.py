@@ -54,7 +54,7 @@ def login():
         username = request.form.get('username')
         pw = request.form.get('password')
 
-        if not username or not pw:
+        if not username or not pw:#Fehlermeldung mit Flash
             flash('Please fill out both fields!')
         else:
             user = User.query.filter_by(username=username).first()
@@ -87,7 +87,7 @@ def register():
                     (User.username == username) | (User.email == email)
                 ).first()
                 if user_exists:
-                    flash('Benutzername oder E-Mail existiert bereits.')
+                    flash('Benutzername oder E-Mail existiert bereits.')#Fehlermeldung
                 else:
                     new_user = User(
                         username=username,
@@ -99,7 +99,7 @@ def register():
                     db.session.add(new_user)
                     db.session.commit()
                     
-                    flash('Registrierung erfolgreich! Bitte einloggen.', 'success')
+                    flash('Registrierung erfolgreich! Bitte einloggen.', 'success')#Flash Nachrichten zum erfolgreichen Login
                     return redirect(url_for('login'))
             except Exception as e:
                 db.session.rollback()
@@ -127,8 +127,8 @@ def upload():
     title = request.form.get('title')
     description = request.form.get('description')
 
-    if not file or file.filename == '':
-        flash("Keine Datei ausgewählt!", "error")
+    if not file or file.filename == '':#Fehler abfangen und mit flash ausgeben
+        flash("Keine Datei ausgewählt!")
         return redirect(url_for('upload'))
 
     if not title:
@@ -143,7 +143,7 @@ def upload():
         flash("Nur PDF-Dateien sind erlaubt.")
         return redirect(url_for('upload'))
 
-    try:
+    try: #from Eingaben in neuem Cheatsheet objekt speichern
         new_sheet = Cheatsheet(
             title=title,
             description=description,
@@ -168,7 +168,7 @@ def vote():
     cheatsheet_id = request.form.get('id') # fragt id vom sheet an
     vote_input = request.form.get('Voteinput') # liest aus index den +/- Button aus
     cheatsheet = Cheatsheet.query.get(cheatsheet_id)
-    if not cheatsheet:
+    if not cheatsheet: #Fehler abfangen und mit flash ausgeben
         flash('Cheatsheet nicht gefunden.')
         return redirect(url_for('index'))
     if vote_input == '+':
