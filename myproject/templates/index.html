@@ -28,17 +28,19 @@
     {% endif %}
 </nav>
     <ul>
-        {% for eintrag in eintraege %}
+        {% for cheatsheet in cheatsheets %}
             <div class="eintrag">
-                <li>{{ eintrag.titel }} | {{ eintrag.beschreibung }} | {{ eintrag.prof }}</li>
+                <li>{{ cheatsheet.title }} | {{ cheatsheet.description }} | {{ cheatsheet.prof }}</li>
                 <div class="buttons-links">
                     <form action="{{ url_for('vote') }}" method="POST">
-                        <input type="hidden" name="id" value="{{eintrag.id}}">
+                        <input type="hidden" name="id" value="{{cheatsheet.id}}">
                         <button type="submit" name="Voteinput" value="+">+</button>
                         <button type="submit" name="Voteinput" value="-">-</button>
+                        <p>Votes: {{ cheatsheet.votes }}</p>
+
                     </form>
 
-                    <p>{{ eintrag.score }}</p>
+                    <p>{{ cheatsheet.score }}</p>
                 </div>
                     <div class="buttons-rechts">
                     <button>Vorschau</button>
