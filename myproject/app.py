@@ -181,7 +181,6 @@ def vote():
         return redirect(url_for('index'))
 
     db.session.commit()
-    flash('Danke für deine Stimme!', 'success')
     return redirect(url_for('index'))
 
 
