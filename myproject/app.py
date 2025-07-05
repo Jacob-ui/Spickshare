@@ -9,14 +9,13 @@ app = Flask(__name__, instance_relative_config=True) #https://claude.ai/share/64
 
 
 # Konfiguration
+app.instance_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'instance') #https://claude.ai/share/644c973d-59db-4614-8e57-cf71e15b4903 to fix multiple instance folder bug
+
 app.config.from_mapping(
     SECRET_KEY='secret_key_just_for_dev_environment',
     SQLALCHEMY_DATABASE_URI=f'sqlite:///{os.path.join(app.instance_path, "spickshare.db")}',
     SQLALCHEMY_TRACK_MODIFICATIONS=False 
 )
-
-app.instance_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'instance') #https://claude.ai/share/644c973d-59db-4614-8e57-cf71e15b4903 to fix multiple instance folder bug
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(app.instance_path, "spickshare.db")}'
 
 #Schauen ob DB existiert
 try:
