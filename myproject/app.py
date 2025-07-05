@@ -184,11 +184,11 @@ def vote():
 
 
 # DB
-@app.route('/create-tables')
-def create_tables():
-    with app.app_context():
-        db.create_all()
-    return 'Database tables created!'
+#@app.route('/create-tables')
+#def create_tables():
+#    with app.app_context():
+#        db.create_all()
+#    return 'Database tables created!'
 
 @app.route('/insert/sample')
 def insert_sample():
