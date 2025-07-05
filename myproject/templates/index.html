@@ -44,7 +44,11 @@
                 </div>
                     <div class="buttons-rechts">
                     <button>Vorschau</button>
-                    <button>Download</button>
+                    {% if user.is_authenticated %}
+                        <a href="{{ url_for('download', cheatsheet_id=cheatsheet.id) }}">
+                            <button>Download</button>
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}

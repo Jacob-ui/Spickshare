@@ -1,9 +1,10 @@
 import os
-from flask import Flask, redirect, url_for, render_template, request, jsonify, flash
+from flask import Flask, redirect, url_for, render_template, request, jsonify, flash, send_file
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash #https://youtu.be/dam0GPOAvVI?t=5750
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user #https://youtu.be/dam0GPOAvVI?t=6589
 from models import User, db, Cheatsheet
+from io import BytesIO #https://youtu.be/pPSZpCVRbvQ?t=322
 
 app = Flask(__name__, instance_relative_config=True) #https://claude.ai/share/644c973d-59db-4614-8e57-cf71e15b4903 to fix multiple instance folder bug
 
@@ -159,6 +160,20 @@ def upload():
         db.session.rollback()
         flash(f"Fehler beim Hochladen: {str(e)}")
         return redirect(url_for('upload'))
+
+# Download Cheetsheet
+@app.route("/download/<int:cheatsheet_id>", methods=["GET"])
+@login_required
+def download(cheatsheet_id):
+    cheatsheet = Cheatsheet.query.filter_by(id=cheatsheet_id).first()
+
+    if not cheatsheet:
+        flash("Cheatsheet nicht gefunden!")
+        return redirect(url_for('index'))
+    
+
+    return send_file(BytesIO(cheatsheet.pdf_datei), download_name = f"{cheatsheet.title}.pdf", as_attachment = True, mimetype = 'application/pdf')
+
 
 # Voting +/-
 @app.route("/vote", methods=["POST"])
