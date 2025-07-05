@@ -162,7 +162,7 @@ def upload():
         return redirect(url_for('upload'))
 
 # Download Cheetsheet
-@app.route("/download/<int:cheatsheet_id>", methods=["GET"])
+@app.route("/download/<int:cheatsheet_id>", methods=["GET"]) #https://youtu.be/pPSZpCVRbvQ?t=273
 @login_required
 def download(cheatsheet_id):
     cheatsheet = Cheatsheet.query.filter_by(id=cheatsheet_id).first()
@@ -172,7 +172,10 @@ def download(cheatsheet_id):
         return redirect(url_for('index'))
     
 
-    return send_file(BytesIO(cheatsheet.pdf_datei), download_name = f"{cheatsheet.title}.pdf", as_attachment = True, mimetype = 'application/pdf')
+    return send_file(BytesIO(cheatsheet.pdf_datei), 
+                     download_name = f"{cheatsheet.title}.pdf", #https://claude.ai/share/287d947c-dbf3-4661-9c37-92af1f920cd7 bug fix
+                     as_attachment = True,
+                     mimetype = 'application/pdf') #https://claude.ai/share/287d947c-dbf3-4661-9c37-92af1f920cd7 macht code sicherer
 
 
 # Voting +/-
