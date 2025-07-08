@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash #https
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user #https://youtu.be/dam0GPOAvVI?t=6589
 from models import User, db, Cheatsheet
 from io import BytesIO #https://youtu.be/pPSZpCVRbvQ?t=322
+import PyPDF2 as pdf #https://youtu.be/OdIHUdQ1-eQ?t=99
 
 app = Flask(__name__, instance_relative_config=True) #https://claude.ai/share/644c973d-59db-4614-8e57-cf71e15b4903 to fix multiple instance folder bug
 
@@ -177,13 +178,30 @@ def download(cheatsheet_id):
                      as_attachment = True,
                      mimetype = 'application/pdf') #https://claude.ai/share/287d947c-dbf3-4661-9c37-92af1f920cd7 macht code sicherer
 
-@app.route("/preview/<int:cheatsheet_id>",methods["GET","POST"])
+@app.route("/preview/<int:cheatsheet_id>",methods=["GET"])
 def preview(cheatsheet_id):
     cheatsheet = Cheatsheet.query.filter_by(id=cheatsheet_id).first()
 
     if not cheatsheet:
         flash("Cheatsheet nicht gefunden!")
         return redirect(url_for('index'))
+    
+    try:
+        pdf_reader = pdf.PdfReader(io.BytesIO(cheatsheet.pdf_datei))
+        pdf_writer = pdf.PdfWriter()
+        pdf_writer.add_page(pdf_reader.pages[0])
+
+        output = io.BytesIO()
+        pdf_writer.write(output)
+        output.seek(0) #https://docs.python.org/3/library/io.html Ändert Stream Position wieder zum Anfang, sonst würde getvalue() später nicht funktionieren
+
+        return output.getvalue()
+    
+    except Exception as e:
+        flash(f"Fehler beim Erstellen der Vorschau: {str(e)}")
+        return redirect(url_for('index'))
+
+
 
 # Voting +/-
 @app.route("/vote", methods=["POST"])
