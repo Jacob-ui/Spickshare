@@ -10,6 +10,11 @@
 <nav style="display: flex; justify-content: space-between; align-items: center; padding: 0px;">
     {% if user.is_authenticated %}
         <h1>Spickshare</h1>
+        
+            {% if user.is_authenticated %}
+                <p style="margin-right: 20px;"Credits:>Credits: {{ user.credits }}</p>
+            {% endif %}
+        
         <form action="{{ url_for('upload')}}">
              <button type="submit">Upload Cheatsheet</button>
         </form>
@@ -30,7 +35,7 @@
     <ul>
         {% for cheatsheet in cheatsheets %}
             <div class="eintrag">
-                <li> {{ cheatsheet.professor }} | {{ cheatsheet.title }} | {{ cheatsheet.module }} <br> {{ cheatsheet.description }}</li>
+                <li> {{ cheatsheet.professor }} | {{ cheatsheet.module }} | {{ cheatsheet.title }} <br> {{ cheatsheet.description }}</li>
                 <div class="buttons-links">
                     <form action="{{ url_for('vote') }}" method="POST">
                         <input type="hidden" name="id" value="{{cheatsheet.id}}">
