@@ -177,6 +177,13 @@ def download(cheatsheet_id):
                      as_attachment = True,
                      mimetype = 'application/pdf') #https://claude.ai/share/287d947c-dbf3-4661-9c37-92af1f920cd7 macht code sicherer
 
+@app.route("/preview/<int:cheatsheet_id>",methods["GET","POST"])
+def preview(cheatsheet_id):
+    cheatsheet = Cheatsheet.query.filter_by(id=cheatsheet_id).first()
+
+    if not cheatsheet:
+        flash("Cheatsheet nicht gefunden!")
+        return redirect(url_for('index'))
 
 # Voting +/-
 @app.route("/vote", methods=["POST"])
