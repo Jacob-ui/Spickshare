@@ -124,9 +124,13 @@ def upload():
         return render_template('upload.html')
 
     # POST: Daten verarbeiten
-    file = request.files.get('file')
     title = request.form.get('title')
     description = request.form.get('description')
+    file = request.files.get('file')
+    module = request.form.get('module')
+    professor = request.form.get('professor')
+
+
 
     if not file or file.filename == '':#Fehler abfangen und mit flash ausgeben
         flash("Keine Datei ausgewählt!")
@@ -136,6 +140,14 @@ def upload():
         flash("Titel darf nicht leer sein.")
         return redirect(url_for('upload'))
     
+    if not module:
+        flash("Modul darf nicht leer sein.")
+        return redirect(url_for('upload'))
+    
+    if not professor:
+        flash("Professor darf nicht leer sein.")
+        return redirect(url_for('upload'))
+
     if not description:
         flash("Beschreibung darf nicht leer sein.")
         return redirect(url_for('upload'))
@@ -149,7 +161,9 @@ def upload():
             title=title,
             description=description,
             pdf_datei=file.read(),
-            user_id=current_user.id
+            user_id=current_user.id,
+            professor=professor,
+            module=module,
         )
         db.session.add(new_sheet)
         db.session.commit()

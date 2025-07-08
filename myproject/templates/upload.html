@@ -13,17 +13,27 @@
 
     <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
         <div class="form-group">
-        <label for="title">Titel</label>
+        <label for="title">Titel des Cheatsheets:</label>
         <input type="text" name="title" class="form-control" required>
         </div>
 
         <div class="form-group">
-        <label for="description">Beschreibung</label>
+        <label for="description">Beschreibung des Cheatsheets:</label>
         <input type="text" name="description" class="form-control" required>
         </div>
 
         <div class="form-group">
-        <label for="file">PDF-Datei</label>
+        <label for="title">Modul:</label>
+        <input type="text" name="module" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+        <label for="title">Professor/Dozent:</label>
+        <input type="text" name="professor" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+        <label for="file">PDF-Datei:</label>
         <input type="file" name="file" accept=".pdf" class="form-control" required>
         </div>
 
