@@ -45,7 +45,7 @@ def start():
 
 @app.route('/index/')
 def index():
-    cheatsheets = Cheatsheet.query.all()    
+    cheatsheets = Cheatsheet.query.order_by(Cheatsheet.votes.desc()).all()  #https://www.youtube.com/watch?v=0_AoM58PSlA  
     return render_template('index.html', cheatsheets=cheatsheets, user=current_user) #https://youtu.be/dam0GPOAvVI?t=7011
 
 #Login:
