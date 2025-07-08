@@ -33,7 +33,11 @@ class Cheatsheet(db.Model):
     votes = db.Column(db.Integer, default=0, nullable=False)
     created_at = db.Column(db.DateTime, default=func.now())
 
-
+class Votes(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    cheatsheet_id = db.Column(db.Integer, db.ForeignKey('cheatsheet.id'), nullable=False)
+    vote = db.Column(db.Integer, default=0, nullable=False)
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
