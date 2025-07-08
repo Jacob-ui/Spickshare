@@ -22,7 +22,7 @@ class User(db.Model, UserMixin):
     #module_id = db.Column(db.Integer, db.ForeignKey('module.id'))
 
 class Cheatsheet(db.Model):
-    id = db.Column(db.Integer, primary_key=False)
+    id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=False)
     creditcost = db.Column(db.Integer, default=1, nullable=True)

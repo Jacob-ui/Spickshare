@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash #https
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user #https://youtu.be/dam0GPOAvVI?t=6589
 from models import User, db, Cheatsheet
 from io import BytesIO #https://youtu.be/pPSZpCVRbvQ?t=322
-import PyPDF2 as pdf #https://youtu.be/OdIHUdQ1-eQ?t=99
+#import PyPDF2 as pdf #https://youtu.be/OdIHUdQ1-eQ?t=99 (Import nicht gefunden)
 
 app = Flask(__name__, instance_relative_config=True) #https://claude.ai/share/644c973d-59db-4614-8e57-cf71e15b4903 to fix multiple instance folder bug
 
