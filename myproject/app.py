@@ -187,16 +187,21 @@ def preview(cheatsheet_id):
         return redirect(url_for('index'))
     
     try:
-        pdf_reader = pdf.PdfReader(io.BytesIO(cheatsheet.pdf_datei))
+        pdf_reader = pdf.PdfReader(BytesIO(cheatsheet.pdf_datei))
         pdf_writer = pdf.PdfWriter()
         pdf_writer.add_page(pdf_reader.pages[0])
 
-        output = io.BytesIO()
+        output = BytesIO()
         pdf_writer.write(output)
-        output.seek(0) #https://docs.python.org/3/library/io.html Ändert Stream Position wieder zum Anfang, sonst würde getvalue() später nicht funktionieren
+        output.seek(0) #https://docs.python.org/3/library/io.html Ändert Stream Position wieder zum Anfang
 
-        return output.getvalue()
-    
+        return send_file(
+            output,
+            mimetype='application/pdf',
+            as_attachment=False,
+            download_name=f"{cheatsheet.title}_preview.pdf"
+        )
+
     except Exception as e:
         flash(f"Fehler beim Erstellen der Vorschau: {str(e)}")
         return redirect(url_for('index'))
