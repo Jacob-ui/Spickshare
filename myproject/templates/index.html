@@ -37,6 +37,10 @@
             <div>
               <a href="{{ url_for('preview', cheatsheet_id=cheatsheet.id) }}" class="btn btn-primary btn-sm">Preview</a>
               {% if user.is_authenticated %}
+                <form action="{{ url_for('buy_cheatsheet') }}" method="POST" style="display:inline;">
+                  <input type="hidden" name="id" value="{{ cheatsheet.id }}">
+                  <button type="submit" class="btn btn-primary btn-sm">Buy</button>
+                </form>
                 <a href="{{ url_for('download', cheatsheet_id=cheatsheet.id) }}" class="btn btn-primary btn-sm">Download</a>
               {% endif %}
             </div>

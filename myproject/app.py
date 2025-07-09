@@ -265,24 +265,29 @@ def buy_cheatsheet():
             flash('Cheatsheet nicht gefunden.')
             return redirect(url_for('index'))
         
-        elif current_user.credits < cheatsheet.cost:
+        elif current_user.credits < cheatsheet.creditcost:
             flash('Please buy sufficient credits!')
         
         elif access:
             flash("You already own this cheatsheet.")
 
         else:
-            current_user.credits -= cheatsheet.cost
-            
+            current_user.credits -= cheatsheet.creditcost
+
             new_access = UserCheatsheetAccess(
                 user_id = current_user.id,
                 cheatsheet_id = cheatsheet_id
             )
+
+            db.session.add(new_access)
+            db.session.commit()
+            flash('Purchase successful!', 'success')
         
     except Exception as e:
             db.session.rollback()
             flash(f'Database error: {str(e)}')
 
+    return redirect(url_for('index'))
 
 # Voting +/-
 @app.route("/vote", methods=["POST"])
