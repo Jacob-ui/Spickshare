@@ -221,6 +221,32 @@ def preview(cheatsheet_id):
         return redirect(url_for('index'))
 
 
+#Credits kaufen
+@app.route("/buy-credits", methods=["GET", "POST"])
+@login_required
+def buy_credits():
+    if request.method == 'POST':
+        quantity = request.form.get('quantity')
+    
+        try:
+
+            if not quantity:
+                flash("Please enter a quantity!")
+            
+            elif not quantity.isnumeric():
+                flash("Please enter a number")
+            
+            else:
+                current_user.credits += quantity
+                db.session.comit()
+        
+        except Exception as e:
+                    db.session.rollback()
+                    flash(f'Database error: {str(e)}')
+
+    return render_template('buy-credits.html')
+
+
 
 # Voting +/-
 @app.route("/vote", methods=["POST"])
