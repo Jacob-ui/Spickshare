@@ -352,6 +352,15 @@ def check_user_access(cheatsheet_id): #https://claude.ai/share/882bbdab-e385-445
 def inject_functions():
     return dict(has_access=check_user_access)
 
+@app.route("/account")
+@login_required
+def account(): #https://www.tutorialspoint.com/sqlalchemy/sqlalchemy_orm_working_with_joins.htm für inner join Befehl
+    cheatsheet_access = db.session.query(UserCheatsheetAccess,Cheatsheet).join(
+        Cheatsheet,UserCheatsheetAccess.cheatsheet_id == Cheatsheet.id).filter(
+        UserCheatsheetAccess.user_id == current_user.id).all()
+    return render_template("account.html", user = current_user, cheatsheet_access = cheatsheet_access)
+
+
 # DB
 #@app.route("/create-tables")
 #def create_tables():

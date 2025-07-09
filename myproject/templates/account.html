@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
+        <a class="navbar-brand" href="#">Account</a>
+        <div class="d-flex ms-auto align-items-center">
+            <span class="me-3">Credits: {{ user.credits }}</span>
+            <a href="{{ url_for('buy_credits') }}" class="btn btn-outline-danger">Buy Credits</a>
+            <form action="{{ url_for('upload') }}" class="me-2">
+                <button type="submit" class="btn btn-outline-primary">Upload</button>
+            </form>
+            <a href="{{ url_for('index') }}" class="btn btn-outline-danger">Homepage</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-outline-danger">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="mb-4">
+            <h4>User Details</h4>
+            <div class="border p-3 rounded">
+                <p><strong>Username:</strong> {{ user.username }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Account Type:</strong> {{ user.userart }}</p>
+            </div>
+        </div>
+
+        <div>
+            <h4>Your Cheatsheets</h4>
+            {% if cheatsheet_access %}
+                <div class="border rounded">
+                    <ul class="list-unstyled p-3">
+                        {% for access, cheatsheet in cheatsheet_access %}
+                            <li class="mb-2 pb-2 border-bottom">
+                                <div class="d-flex justify-content-between">
+                                    <span>
+                                        {{ cheatsheet.title }} ({{ cheatsheet.module }}, {{ cheatsheet.professor }})
+                                    </span>
+                                    <span class="text-muted">
+                                        {% if access.vote == 1 %}
+                                            👍
+                                        {% elif access.vote == -1 %}
+                                            👎
+                                        {% else %}
+                                            No rating
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% else %}
+                <div class="border p-3 rounded">
+                    <p>You don't have access to any cheatsheets yet.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
