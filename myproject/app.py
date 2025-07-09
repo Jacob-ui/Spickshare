@@ -327,7 +327,30 @@ def vote():
     
     return redirect(url_for("index"))
 
+@login_required
+def has_access(cheatsheet_id):
+    access = UserCheatsheetAccess.query.filter_by(
+        user_id = current_user.id,
+        cheatsheet_id = cheatsheet_id
+    ).first()
+    if access:
+        return True
+    else:
+        return False
 
+def check_user_access(cheatsheet_id): #https://claude.ai/share/882bbdab-e385-445d-a3f9-b3d34192b12e has_access konnte in index.html nicht ohne seperate Template Functions ausgeführt werden
+    if not current_user.is_authenticated:
+        return False
+    
+    access = UserCheatsheetAccess.query.filter_by(
+        user_id=current_user.id,
+        cheatsheet_id=cheatsheet_id
+    ).first()
+    return access is not None
+
+@app.context_processor #https://claude.ai/share/882bbdab-e385-445d-a3f9-b3d34192b12e has_access konnte in index.html nicht ohne seperate Template Functions ausgeführt werden
+def inject_functions():
+    return dict(has_access=check_user_access)
 
 # DB
 #@app.route("/create-tables")

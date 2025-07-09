@@ -29,18 +29,23 @@
           <div class="d-flex justify-content-between">
             <form action="{{ url_for('vote') }}" method="POST" class="d-flex align-items-center">
               <input type="hidden" name="id" value="{{ cheatsheet.id }}">
-              <button type="submit" name="Voteinput" value="+" class="btn btn-success btn-sm me-1">+</button>
-              <button type="submit" name="Voteinput" value="-" class="btn btn-danger btn-sm me-2">-</button>
+              {% if user.is_authenticated and has_access(cheatsheet.id) %}
+                <button type="submit" name="Voteinput" value="+" class="btn btn-success btn-sm me-1">+</button>
+                <button type="submit" name="Voteinput" value="-" class="btn btn-danger btn-sm me-2">-</button>
+              {% endif %}
               <span>Votes: {{ cheatsheet.votes }}</span>
             </form>
 
             <div>
-              <a href="{{ url_for('preview', cheatsheet_id=cheatsheet.id) }}" class="btn btn-primary btn-sm">Preview</a>
-              {% if user.is_authenticated %}
+              {% if not user.is_authenticated%}
+                <a href="{{ url_for('preview', cheatsheet_id=cheatsheet.id) }}" class="btn btn-primary btn-sm">Preview</a>
+              {% elif user.is_authenticated and not has_access(cheatsheet.id) %}
+                <a href="{{ url_for('preview', cheatsheet_id=cheatsheet.id) }}" class="btn btn-primary btn-sm">Preview</a>
                 <form action="{{ url_for('buy_cheatsheet') }}" method="POST" style="display:inline;">
                   <input type="hidden" name="id" value="{{ cheatsheet.id }}">
                   <button type="submit" class="btn btn-primary btn-sm">Buy</button>
                 </form>
+              {% elif user.is_authenticated and has_access(cheatsheet.id) %}
                 <a href="{{ url_for('download', cheatsheet_id=cheatsheet.id) }}" class="btn btn-primary btn-sm">Download</a>
               {% endif %}
             </div>
