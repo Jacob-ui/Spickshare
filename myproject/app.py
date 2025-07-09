@@ -3,7 +3,7 @@ from flask import Flask, redirect, url_for, render_template, request, jsonify, f
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash #https://youtu.be/dam0GPOAvVI?t=5750
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user #https://youtu.be/dam0GPOAvVI?t=6589
-from models import User, db, Cheatsheet
+from models import User, db, Cheatsheet, UserCheatsheetAccess
 from io import BytesIO #https://youtu.be/pPSZpCVRbvQ?t=322
 import PyPDF2 as pdf #https://youtu.be/OdIHUdQ1-eQ?t=99
 
@@ -250,6 +250,38 @@ def buy_credits():
 
     return render_template('buy-credits.html')
 
+@app.route("/buy-cheatsheet", methods=["POST"])
+@login_required
+def buy_cheatsheet():
+    cheatsheet_id = request.form.get('id')
+    cheatsheet = Cheatsheet.query.get(cheatsheet_id)
+    access = UserCheatsheetAccess.query.filter_by(
+        user_id = current_user.id,
+        cheatsheet_id = cheatsheet_id
+    ).first()
+    
+    try: 
+        if not cheatsheet:  #Fehler abfangen und mit flash ausgeben
+            flash('Cheatsheet nicht gefunden.')
+            return redirect(url_for('index'))
+        
+        elif current_user.credits < cheatsheet.cost:
+            flash('Please buy sufficient credits!')
+        
+        elif access:
+            flash("You already own this cheatsheet.")
+
+        else:
+            current_user.credits -= cheatsheet.cost
+            
+            new_access = UserCheatsheetAccess(
+                user_id = current_user.id,
+                cheatsheet_id = cheatsheet_id
+            )
+        
+    except Exception as e:
+            db.session.rollback()
+            flash(f'Database error: {str(e)}')
 
 
 # Voting +/-
