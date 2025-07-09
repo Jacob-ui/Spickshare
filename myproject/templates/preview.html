@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Preview: {{ cheatsheet.title }}{% endblock %}
+
+{% block content %}
+<h3>Preview: {{ cheatsheet.title }}</h3>
+<div class="info">
+        <p><strong>Beschreibung:</strong> {{ cheatsheet.description }}</p>
+        <p><strong>Hochgeladen am:</strong> {{ cheatsheet.created_at.strftime('%d.%m.%Y %H:%M') }}</p>
+        <p><strong>Bewertungen:</strong> {{ cheatsheet.votes }}</p>
+    </div>
+<div class="preview-container">
+        <h3>First Page (Preview)</h3>
+
+        <iframe src="{{ url_for('preview', cheatsheet_id=cheatsheet.id) }}" 
+                class="preview-frame"
+                title="PDF Preview of {{ cheatsheet.title }}">
+            <p>Ihr Browser unterstützt keine PDF-Vorschau. 
+                <a href="{{ url_for('preview', cheatsheet_id=cheatsheet.id) }}" target="_blank">
+                    Klicken Sie hier, um die Vorschau zu öffnen
+                </a>
+            </p>
+        </iframe>
+
+        <p><em>Dies ist nur eine Vorschau der ersten Seite. Zum Download des vollständigen PDFs bitte den Download-Button verwenden.</em></p>
+</div>
+    <div class="buttons">
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">
+            Zurück zur Übersicht
+        </a>
+    </div>
+{% endblock %}
