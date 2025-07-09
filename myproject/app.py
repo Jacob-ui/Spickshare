@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash #https
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user #https://youtu.be/dam0GPOAvVI?t=6589
 from models import User, db, Cheatsheet
 from io import BytesIO #https://youtu.be/pPSZpCVRbvQ?t=322
-#import PyPDF2 as pdf #https://youtu.be/OdIHUdQ1-eQ?t=99 (Import nicht gefunden)
+import PyPDF2 as pdf #https://youtu.be/OdIHUdQ1-eQ?t=99
 
 app = Flask(__name__, instance_relative_config=True) #https://claude.ai/share/644c973d-59db-4614-8e57-cf71e15b4903 to fix multiple instance folder bug
 
@@ -192,7 +192,7 @@ def download(cheatsheet_id):
                      as_attachment = True,
                      mimetype = 'application/pdf') #https://claude.ai/share/287d947c-dbf3-4661-9c37-92af1f920cd7 macht code sicherer
 
-@app.route("/preview/<int:cheatsheet_id>",methods=["GET"])
+@app.route("/preview/<int:cheatsheet_id>",methods=["GET"]) #https://youtu.be/OdIHUdQ1-eQ?t=914 teilweise hiermit gemacht
 def preview(cheatsheet_id):
     cheatsheet = Cheatsheet.query.filter_by(id=cheatsheet_id).first()
 
@@ -207,13 +207,13 @@ def preview(cheatsheet_id):
 
         output = BytesIO()
         pdf_writer.write(output)
-        output.seek(0) #https://docs.python.org/3/library/io.html Ändert Stream Position wieder zum Anfang
+        output.seek(0) #https://claude.ai/share/1ed27432-5d2d-4c34-bd75-52f20ac69919 https://docs.python.org/3/library/io.html Ändert Stream Position wieder zum Anfang
 
         return send_file(
             output,
+            download_name=f"{cheatsheet.title}_preview.pdf",
             mimetype='application/pdf',
             as_attachment=False,
-            download_name=f"{cheatsheet.title}_preview.pdf"
         )
 
     except Exception as e:
