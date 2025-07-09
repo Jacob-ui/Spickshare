@@ -17,6 +17,7 @@
   <div class="d-flex ms-auto align-items-center">
     {% if user.is_authenticated %}
       <span class="me-3">Credits: {{ user.credits }}</span>
+      <a href="{{ url_for('buy_credits') }}" class="btn btn-outline-danger">Buy Credits</a>
       <form action="{{ url_for('upload') }}" class="me-2">
         <button type="submit" class="btn btn-outline-primary">Upload</button>
       </form>
