@@ -296,13 +296,21 @@ def vote():
     cheatsheet_id = request.form.get('id') # fragt id vom sheet an
     vote_input = request.form.get('Voteinput') # liest aus index den +/- Button aus
     cheatsheet = Cheatsheet.query.get(cheatsheet_id)
+    access = UserCheatsheetAccess.query.filter_by(
+        user_id = current_user.id,
+        cheatsheet_id = cheatsheet_id
+    ).first()
+
     if not cheatsheet: #Fehler abfangen und mit flash ausgeben
         flash('Cheatsheet nicht gefunden.')
         return redirect(url_for('index'))
-    if vote_input == '+':
-        cheatsheet.votes += 1
-    elif vote_input == '-':
-        cheatsheet.votes -= 1
+    
+    elif access:
+        if vote_input == '+':
+            access.vote == 1
+        elif vote_input == '-':
+            access.vote == -1
+        
     else:
         flash('Ungültiger Vote!')
         return redirect(url_for('index'))
