@@ -235,11 +235,15 @@ def buy_credits():
             
             elif not quantity.isnumeric():
                 flash("Please enter a number")
+
+            elif int(quantity) <= 0:
+                flash("Please enter a number greater than zero.")
             
             else:
-                current_user.credits += quantity
-                db.session.comit()
-        
+                current_user.credits += int(quantity)
+                db.session.commit()
+                flash('Purchase successful!', 'success')
+                return redirect(url_for("index"))
         except Exception as e:
                     db.session.rollback()
                     flash(f'Database error: {str(e)}')
