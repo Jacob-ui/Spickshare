@@ -17,7 +17,7 @@ nav_order: 3
 {: toc }
 </details>
 
-## Cooper Woolley – Review 1
+## Jacob – Review for Cooper Woolley
 
 ### My Observation (Wahrnehmung)  
 Cooper arbeitet sehr zielgerichtet am Projekt, vor allem im Bereich der Datenbank. Er bringt regelmäßig sinnvolle Vorschläge ein, die zur Verbesserung des Gesamtergebnisses beitragen.
