@@ -81,3 +81,12 @@ nav_order: 1
 
 **Umsetzung**  
 : Coins sind als Feld `credits` in der `user`-Tabelle hinterlegt. Bei jedem Kauf erfolgt ein Datenbankeintrag in `order` sowie ein Abzug der Coins. Noch offen: Stripe-Integration zur Coin-Aufladung.
+
+# Zusätzlich (Additional)
+- Verification with phone number
+- Admin Accounts
+- Split code into multiple files -> for better readability
+- Stripe payment integration
+
+
+
