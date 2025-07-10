@@ -4,9 +4,6 @@ parent: Team Evaluation
 nav_order: 4
 ---
 
-{: .label }
-Spickshare
-
 {: .no_toc }
 # Summary of individual contributions
 
