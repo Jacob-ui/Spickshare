@@ -17,14 +17,13 @@ nav_order: 3
 {: toc }
 </details>
 
-## Cooper Woolley - review 1
+## Cooper Woolley – Review 1
 
-### My observation (Wahrnehmung)
+### My Observation (Wahrnehmung)  
+Cooper arbeitet sehr zielgerichtet am Projekt, vor allem im Bereich der Datenbank. Er bringt regelmäßig sinnvolle Vorschläge ein, die zur Verbesserung des Gesamtergebnisses beitragen.
 
-Cooper arbeitet sehr effektiv am Projekt, besonders an der Datenbank und bringt regelmäßig Vorschläge ein, die unser Ergebnis verbessern.
+### Effect on Me (Wirkung)  
+Durch seine Verlässlichkeit kann ich mich auf andere Bestandteile des Codes konzentrieren. Die Zusammenarbeit mit ihm verläuft effizient und unterstützt den Projektfortschritt.
 
-### Effect on me (Wirkung)
-Da ich mich auf Cooper sehr gut verlassen kann, ich mich parrallel um andere Bestandteile des Codes kümmern.
-
-### Tip for the future (Wunsch)
-Ich wünsche mir, dass Cooper weiterhin  engagiert bleibt und wir uns bei unseren Codeteilen gegenseitig mehr unterstützen.
+### Tip for the Future (Wunsch)  
+Ich wünsche mir, dass Cooper weiterhin engagiert bleibt und wir uns zukünftig noch aktiver bei der Entwicklung unserer jeweiligen Codeteile gegenseitig unterstützen.

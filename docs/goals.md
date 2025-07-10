@@ -14,37 +14,70 @@ nav_order: 1
 {: toc }
 </details>
 
-## Verbesserung des Votes Systems
+## Verbesserung des Vote-Systems
 
-Goal Definition
-: Bisher können unendlich viele Votes per Buttons hinzugefügt werden, diese sollen auf eine Interaktion beschränkt werden
+**Goal Definition**  
+: Nutzer sollen ein Spickzettel nur einmal bewerten können. Bisher konnte durch wiederholtes Klicken unendlich oft abgestimmt werden.
 
-## Datenbank Lauffähig machen
+**Umsetzung**  
+: Die Votes wurden mit der Tabelle `user_cheatsheet_access` verknüpft. Jede Bewertung (Upvote/Downvote) wird dort pro User eindeutig gespeichert und mehrfaches Voting verhindert.
 
-Goal Definition
-: Die Datenbank richtig initialisieren und mit Login/Registration, funktionsfähig machen
+---
+
+## Datenbank lauffähig machen
+
+**Goal Definition**  
+: Die Datenbank soll initialisiert und vollständig angebunden werden. Login, Registrierung und Datenspeicherung müssen funktionieren.
+
+**Umsetzung**  
+: Die Tabellen für User, Cheatsheets, Bestellungen und Zugriff wurden erfolgreich erstellt und verknüpft. Login und Registrierung funktionieren mit Passwort-Hashing, Nutzerrollen und Credits.
+
+---
 
 ## Voting mit Datenbank verknüpfen
 
-Goal Definition
-: Voting sollen für jeden Nutzer in der Datenbank gespeichert werden
+**Goal Definition**  
+: Stimmen für ein Cheatsheet sollen in der Datenbank festgehalten und pro Nutzer nachvollziehbar sein.
 
-## Upload und Download von PDF Dateien hinzufügen
+**Umsetzung**  
+: Votes werden nun über die `user_cheatsheet_access`-Tabelle gespeichert und beim erneuten Aufruf ausgewertet, um Mehrfachabstimmungen zu verhindern.
 
-Goal Definition
-: PDF Dateien für die Spickzettel sollen für registrierte User Upload und Download fähig sein
+---
+
+## Upload und Download von PDF-Dateien
+
+**Goal Definition**  
+: Registrierte Nutzer sollen PDF-Dateien hochladen und (nach Kauf oder Freischaltung) herunterladen können.
+
+**Umsetzung**  
+: Der Upload funktioniert inklusive Beschreibung, Modul und Professorenangabe. Downloads sind nur für freigeschaltete Spickzettel möglich. Die Dateien werden serverseitig gespeichert und sicher zugeordnet.
+
+---
 
 ## Vorschau der Spickzettel
 
-Goal Definition
-: Spickzettel sollen vorher (nur zum Teil) angeschaut werden können -> dafür könnte z.B. ein Vorschaubild hochgeladen werden
+**Goal Definition**  
+: Vor dem Kauf soll ein Spickzettel teilweise angesehen werden können (z. B. Vorschauseite oder Bild).
 
-## Coins
+**Umsetzung**  
+: Eine einfache Vorschaufunktion wurde vorbereitet. Aktuell wird ein Platzhalterbild oder eine reduzierte Seitenversion angezeigt. Weitere Optimierung (automatische Vorschaugenerierung) ist geplant.
 
-Goal Definition
-: Coins hinzufügen und jeden User zum Start eine bestimmte Anzahl an Coins geschenken um die ersten Spickzettel kostenlos herunterzuladen um die Funtkion der Plttform zu testen
+---
 
-## Coins
+## Coins (Creditsystem)
 
-Goal Definition
-: Coins für User und Spickzettel in der Datenbank hinzufügen
+**Goal Definition**  
+: Nutzer erhalten beim Start kostenlose Coins, um erste Spickzettel testen zu können. Downloads kosten Coins, Uploads bringen keine.
+
+**Umsetzung**  
+: Jeder User startet mit einem Coin-Guthaben. Die Preise pro Spickzettel sind einstellbar. Käufe werden in der `order`-Tabelle gespeichert. Coin-Abzüge beim Download sowie spätere Aufladung per Stripe sind vorgesehen.
+
+---
+
+## Coins in der Datenbank verwalten
+
+**Goal Definition**  
+: Coins (Credits) sollen in der Datenbank erfasst und korrekt abgerechnet werden (Kauf, Download, Kontostand).
+
+**Umsetzung**  
+: Coins sind als Feld `credits` in der `user`-Tabelle hinterlegt. Bei jedem Kauf erfolgt ein Datenbankeintrag in `order` sowie ein Abzug der Coins. Noch offen: Stripe-Integration zur Coin-Aufladung.

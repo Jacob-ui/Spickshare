@@ -7,24 +7,32 @@ nav_order: 5
 {: .label }
 [Jane Dane]
 
-# Team evaluation
+# Team Evaluation
+
 ## Inhaltsverzeichnis
-- [Value proposition](value-proposition.md)
+
+- [Value Proposition](value-proposition.md)
 - [Resources](resources.md)
 - [Contributions](contributions.md)
 - [Goals](goals.md)
-- [peer-review](peer-review.md)
+- [Peer Review](peer-review.md)
 - [Improvements](improvements.md)
 - [Database](db.md)
+- [Design Decisions We Made](design-decisions.md)
 
 
-
-
+---
 
 ## Kurzbeschreibung
-- Hier wird das gesamte Projekt "Spickshare" Dokumentiert.
-- Auf der Plattform laden Studierende Spickzettel als PDF hoch und verdienen Coins durch Upvotes. Gute Inhalte werden belohnt, Coins können eingelöst oder ausgezahlt werden. Nach Telefonnummer-Verifizierung gibt’s einen Coin gratis. Vorschauen bieten Einblick vor dem Kauf.
 
-## Members:
-### Cooper Woolley
-### Jacob Gotter
+In diesem Projekt dokumentieren wir die Entwicklung von **Spickshare** – einer Plattform, auf der Studierende ihre selbst erstellten Spickzettel (PDFs) hochladen können.  
+Gute Inhalte werden durch **Upvotes** belohnt und bringen den Ersteller:innen **Coins** ein. Coins können wiederum für den Download anderer Inhalte verwendet oder perspektivisch ausgezahlt werden.
+
+Nach erfolgreicher Verifizierung (z. B. Telefonnummer) erhalten neue Nutzer:innen einen kostenlosen Start-Coin. Vorschaufunktionen ermöglichen einen ersten Einblick in ein Dokument vor dem Download.
+
+---
+
+## Teammitglieder
+
+- **Cooper Woolley**
+- **Jacob Gotter**
