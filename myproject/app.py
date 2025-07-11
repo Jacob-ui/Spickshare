@@ -6,6 +6,8 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from models import User, db, Cheatsheet, UserCheatsheetAccess
 from io import BytesIO #https://youtu.be/pPSZpCVRbvQ?t=322
 import PyPDF2 as pdf #https://youtu.be/OdIHUdQ1-eQ?t=99
+from sqlalchemy import func
+
 
 app = Flask(__name__, instance_relative_config=True) #https://claude.ai/share/644c973d-59db-4614-8e57-cf71e15b4903 to fix multiple instance folder bug
 
@@ -358,7 +360,16 @@ def account(): #https://www.tutorialspoint.com/sqlalchemy/sqlalchemy_orm_working
     cheatsheet_access = db.session.query(UserCheatsheetAccess,Cheatsheet).join(
         Cheatsheet,UserCheatsheetAccess.cheatsheet_id == Cheatsheet.id).filter(
         UserCheatsheetAccess.user_id == current_user.id).all()
-    return render_template("account.html", user = current_user, cheatsheet_access = cheatsheet_access)
+
+    # Cheatsheets, die der User selber hochgeladen hat
+    uploaded_cheatsheets = Cheatsheet.query.filter_by(user_id=current_user.id).all()
+    #Anzahl der likes der eigenen Cheatsheets
+    total_likes = db.session.query(func.sum(Cheatsheet.votes)).filter(
+        Cheatsheet.user_id == current_user.id,
+        Cheatsheet.votes > 0
+    ).scalar() or 0
+
+    return render_template("account.html", user = current_user, cheatsheet_access = cheatsheet_access, uploaded_cheatsheets=uploaded_cheatsheets, total_likes=total_likes)
 
 
 # DB

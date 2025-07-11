@@ -25,35 +25,63 @@
         </div>
 
         <div>
-            <h4>Your Cheatsheets</h4>
-            {% if cheatsheet_access %}
-                <div class="border rounded">
-                    <ul class="list-unstyled p-3">
-                        {% for access, cheatsheet in cheatsheet_access %}
-                            <li class="mb-2 pb-2 border-bottom">
-                                <div class="d-flex justify-content-between">
-                                    <span>
-                                        {{ cheatsheet.title }} ({{ cheatsheet.module }}, {{ cheatsheet.professor }})
-                                    </span>
-                                    <span class="text-muted">
-                                        {% if access.vote == 1 %}
-                                            👍
-                                        {% elif access.vote == -1 %}
-                                            👎
-                                        {% else %}
-                                            No rating
-                                        {% endif %}
-                                    </span>
-                                </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            {% else %}
-                <div class="border p-3 rounded">
-                    <p>You don't have access to any cheatsheets yet.</p>
-                </div>
-            {% endif %}
+           {% if cheatsheet_access %}
+    <div>
+        <h4>Your Cheatsheets</h4>
+        <div class="border rounded">
+            <ul class="list-unstyled p-3">
+                {% for access, cheatsheet in cheatsheet_access %}
+                    <li class="mb-2 pb-2 border-bottom">
+                        <div class="d-flex justify-content-between">
+                            <span>
+                                {{ cheatsheet.title }} ({{ cheatsheet.module }}, {{ cheatsheet.professor }})
+                            </span>
+                            <span class="text-muted">
+                                {% if access.vote == 1 %}
+                                    👍
+                                {% elif access.vote == -1 %}
+                                    👎
+                                {% else %}
+                                    No rating
+                                {% endif %}
+                            </span>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
+    </div>
+{% endif %}
+
+<div class="mt-5">
+    <h4>Cheatsheets You Uploaded</h4>
+    {% if uploaded_cheatsheets %}
+        <div class="border rounded p-3">
+            <ul class="list-unstyled">
+                {% for sheet in uploaded_cheatsheets %}
+                    <li class="mb-2 pb-2 border-bottom">
+                        <div class="d-flex justify-content-between">
+                            <span>{{ sheet.title }} ({{ sheet.module }}, {{ sheet.professor }})</span>
+                            <span>
+                                {% if sheet.votes > 0 %}
+                                    <span class="text-success">👍 {{ sheet.votes }}</span>
+                                {% elif sheet.votes < 0 %}
+                                    <span class="text-danger">👎 {{ sheet.votes }}</span>
+                                {% else %}
+                                    <span class="text-muted">No votes</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+        <div class="border p-3 rounded">
+            <p>You haven't uploaded any cheatsheets yet.</p>
+        </div>
+    {% endif %}
+</div>
+
     </div>
 {% endblock %}
