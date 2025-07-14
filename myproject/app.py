@@ -7,8 +7,10 @@ from models import User, db, Cheatsheet, UserCheatsheetAccess
 from io import BytesIO #https://youtu.be/pPSZpCVRbvQ?t=322
 import PyPDF2 as pdf #https://youtu.be/OdIHUdQ1-eQ?t=99
 from sqlalchemy import func
+import stripe
 
-
+stripe.api_key = "sk_test_51RjIRVD6YuO3EM7xUfa6VRRR8JRJjE2uhuzUN7zTLUn9QqYRebXWoNA7CQHHovmszLXkzNzPFpyZ4Uk0hntf7oum00JesViHM7"  # Dein Secret Key von Stripe
+YOUR_DOMAIN = "http://localhost:5000"  #
 app = Flask(__name__, instance_relative_config=True) #https://claude.ai/share/644c973d-59db-4614-8e57-cf71e15b4903 to fix multiple instance folder bug
 
 
@@ -227,30 +229,70 @@ def preview(cheatsheet_id):
 @app.route("/buy-credits", methods=["GET", "POST"])
 @login_required
 def buy_credits():
-    if request.method == 'POST':
+    if request.method == "POST":
         quantity = request.form.get("quantity")
-    
+
+        if not quantity or not quantity.isdigit() or int(quantity) <= 0:
+            flash("Bitte gib eine gültige Anzahl an Credits ein.", "error")
+            return redirect(url_for("buy_credits"))
+
+        quantity = int(quantity)
         try:
+            session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=[{
+                    'price_data': {
+                        'currency': 'eur',
+                        'unit_amount': quantity * 100,  # 1 Credit = 1 EUR
+                        'product_data': {
+                            'name': f'{quantity} Credits',
+                        },
+                    },
+                    'quantity': 1,
+                }],
+                mode='payment',
+                success_url=url_for('payment_success', _external=True) + '?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url=url_for('buy_credits', _external=True),
+                metadata={
+                    "user_id": current_user.id,
+                    "credits": quantity
+                }
+            )
+            return redirect(session.url, code=303)
 
-            if not quantity:
-                flash("Please enter a quantity!")
-            
-            elif not quantity.isnumeric():
-                flash("Please enter a number")
-
-            elif int(quantity) <= 0:
-                flash("Please enter a number greater than zero.")
-            
-            else:
-                current_user.credits += int(quantity)
-                db.session.commit()
-                flash("Purchase successful!", "success")
-                return redirect(url_for("index"))
         except Exception as e:
-                    db.session.rollback()
-                    flash(f"Database error: {str(e)}")
+            flash(f"Fehler beim Erstellen der Stripe-Session: {str(e)}", "error")
+            return redirect(url_for("buy_credits"))
 
     return render_template("buy-credits.html")
+
+@app.route("/payment-success")
+@login_required
+def payment_success():
+    session_id = request.args.get("session_id")
+    if not session_id:
+        flash("Keine Session-ID gefunden.", "error")
+        return redirect(url_for("index"))
+
+    try:
+        session = stripe.checkout.Session.retrieve(session_id)
+
+        # Sicherheit: Nutzer darf nur seine eigene Zahlung bestätigen
+        if str(current_user.id) != session.metadata["user_id"]:
+            flash("Unberechtigter Zugriff auf Zahlung.", "error")
+            return redirect(url_for("index"))
+
+        credits = int(session.metadata["credits"])
+        current_user.credits += credits
+        db.session.commit()
+
+        flash(f"Zahlung erfolgreich! {credits} Credits wurden deinem Konto gutgeschrieben.", "success")
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Fehler beim Verarbeiten der Zahlung: {str(e)}", "error")
+
+    return redirect(url_for("account"))
+
 
 @app.route("/buy-cheatsheet", methods=["POST"])
 @login_required
