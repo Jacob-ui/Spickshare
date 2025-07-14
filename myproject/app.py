@@ -9,6 +9,8 @@ import PyPDF2 as pdf #https://youtu.be/OdIHUdQ1-eQ?t=99
 from sqlalchemy import func
 import stripe
 
+stripe.api_key = "sk_test_51RjIRVD6YuO3EM7xUfa6VRRR8JRJjE2uhuzUN7zTLUn9QqYRebXWoNA7CQHHovmszLXkzNzPFpyZ4Uk0hntf7oum00JesViHM7"  # Dein Secret Key von Stripe
+YOUR_DOMAIN = "http://localhost:5000"  #
 app = Flask(__name__, instance_relative_config=True) #https://claude.ai/share/644c973d-59db-4614-8e57-cf71e15b4903 to fix multiple instance folder bug
 
 
