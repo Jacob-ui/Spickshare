@@ -47,3 +47,29 @@
 - **22.06.2025**  
   Weiteres SQLite Tutorial:  
   - [SQLite Tutorial](https://www.youtube.com/watch?v=WBzB7VtH7-g)
+
+- **01.07.2025**  
+  Proof File:  
+  - [If file proof](https://flask.palletsprojects.com/en/latest/patterns/fileuploads/#handling-uploads)
+
+
+- **11.07.2025**  
+  Account Page and Cheatsheets:  
+  - [SQL Alchemy filters](https://docs.sqlalchemy.org/en/20/orm/queryguide/select.html#simple-equality-filters)
+  - [SQL Alchemy func.sum](https://docs.sqlalchemy.org/en/20/core/functions.html#sqlalchemy.sql.functions.func.sum)
+
+- **14.07.2025**  
+  Stripe Integration:
+  - [Import Stripe](https://docs.stripe.com/api?lang=python)
+  - [Stripe fulfillment](https://docs.stripe.com/checkout/fulfillment)
+  - [Stripe Checkout Session](https://docs.stripe.com/api/checkout/sessions/create)
+  - [Stripe Method Type](https://stripe.com/docs/api/checkout/sessions/create#create-checkout-session-payment_method_types)
+  - [Stripe Price data](https://stripe.com/docs/api/checkout/sessions/create#create-checkout-session-line_items-price_data)
+  - [Stripe Product data](https://stripe.com/docs/api/checkout/sessions/create#create-checkout-session-line_items-price_data-product_data)
+  - [Stripe Session mode](https://stripe.com/docs/api/checkout/sessions/create#create-checkout-session-mode)
+  - [Stripe fulfill orders](https://stripe.com/docs/payments/checkout/fulfill-orders)
+  - [Stripe cancel url](https://stripe.com/docs/api/checkout/sessions/create#create-checkout-session-cancel_url)
+  - [Stripe meta data](https://stripe.com/docs/api/checkout/sessions/create#create-checkout-session-metadata)
+  - [Stripe retrieve](https://stripe.com/docs/api/checkout/sessions/retrieve)
+
+
