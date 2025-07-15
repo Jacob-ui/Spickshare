@@ -47,3 +47,54 @@
 - **22.06.2025**  
   Weiteres SQLite Tutorial:  
   - [SQLite Tutorial](https://www.youtube.com/watch?v=WBzB7VtH7-g)
+
+- **24.06.2025**
+  An Datenbank weitergearbeitet
+
+- **28.06.2025**
+  An Register Funktion weitergearbeitet, teilweise mit claude.ai. Speichert jetzt neue User in der Datanbank:
+  - [Bugs fixen] (https://claude.ai/share/644c973d-59db-4614-8e57-cf71e15b4903)
+
+  Implementierung von werkzeug.security, Youtube Tutorial verwendet:
+  - [werkzeug.security Tutorial] (https://youtu.be/dam0GPOAvVI?t=5750)
+
+- **29.06.2025**
+  Flask_login für Sessions, Authentification und Route Protection implementiert, Youtube Tutorial verwendet:
+  - [Flask_login Tutorial] (https://youtu.be/dam0GPOAvVI?t=6589, https://youtu.be/dam0GPOAvVI?t=6355, https://youtu.be/dam0GPOAvVI?t=6715)
+
+- **30.06.2025**
+  Wechsel zu SQLAlchemy, teilweise Youtube Tutorial verwendet. Unnötige Dateien wie sql Dateien entfernt:
+  - [SQLAlchemy Guide] (https://hwrberlin.github.io/fswd/sqlalchemy.html)
+  - [Flask_login UserMixin implementierung] (https://youtu.be/dam0GPOAvVI?t=4993, https://youtu.be/dam0GPOAvVI?t=6784)
+
+- **05.07.2025**
+  Download Funktion hinzugefügt, Youtube Tutorial und claude.ai verwendet:
+  - [Download Funktion mit BytesIO] (https://youtu.be/pPSZpCVRbvQ?t=322, https://youtu.be/pPSZpCVRbvQ?t=273)
+  - [Bug Fixt] (https://claude.ai/share/287d947c-dbf3-4661-9c37-92af1f920cd7)
+
+  Redundante Zeilen entfernt
+
+- **08.07.2025**
+  Angefangen, an der Preview Function zu arbeiten, mit Youtube Tutorial:
+  - [PyPDF2] (https://youtu.be/OdIHUdQ1-eQ?t=99)
+
+- **09.07.2025**
+  Preview Funktion fertig gemacht, Youtube Tutorial und claude.ai verwendet:
+  - [PyPDF2] (https://youtu.be/OdIHUdQ1-eQ?t=914)
+  - [output.seek Funktion] (https://claude.ai/share/1ed27432-5d2d-4c34-bd75-52f20ac69919 https://docs.python.org/3/library/io.html)
+  - [iframe] (https://www.youtube.com/watch?v=aRGdDy18qfY)
+
+  Buy_credits und buy_cheatsheet Funktionen erstellt und vote Funktion verbessert. App.py ein bisschen einheitlicher gemacht
+
+  Has_access Funktionen erstellt, Claude.ai verwendet:
+  - [inject_functions] (https://claude.ai/share/882bbdab-e385-445d-a3f9-b3d34192b12e)
+
+  Account Funktion erstellt, Guide verwendet:
+  - [SQLAlchemy Inner Join Befehl] (https://www.tutorialspoint.com/sqlalchemy/sqlalchemy_orm_working_with_joins.htm)
+
+- **15.07.2025**
+  Flash Message Bug gefixed, claude.ai verwendet:
+  - [JS Bundle] (https://getbootstrap.com/docs/5.1/getting-started/introduction/ https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js)
+  - [Bug Fix] (https://claude.ai/share/4247021c-b55b-40d8-aefd-1b2ca95f3a8a)
+
+  Design Decisions, Peer Review, Contributions und Resources zu Docs hinzugefügt
