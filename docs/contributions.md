@@ -17,8 +17,15 @@ nav_order: 4
 ## Cooper Woolley
 
 Contributions
-: Entwurf des Datenbankschemas  
-: ...
+: Entwurf des Datenbankschemas inkl. Models.py
+: Wechsel zu SQLAlchemy
+: Flask_login implementiert für Session Management, User Authentification und Route Protection
+: Login/ Register/ Logout Funktionen erstellt
+: Download/ Preview/ Buy_credits/ Buy_cheatsheet/ Account Funktionen erstellt
+: has_access Funktionen erstellt
+: Flash Messages implementiert
+: Bug fixes bei anderen Funktionen getätigt wie voting
+: Manche HTML Seiten erstellt wie buy_credits, login, register
 
 ## Jacob Gotter
 
