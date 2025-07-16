@@ -10,7 +10,7 @@ from sqlalchemy import func
 import stripe #https://docs.stripe.com/api?lang=python
 from functools import wraps #https://www.freecodecamp.org/news/python-decorators-explained-with-examples/
 
-stripe.api_key = "sk_test_51RjIRVD6YuO3EM7xUfa6VRRR8JRJjE2uhuzUN7zTLUn9QqYRebXWoNA7CQHHovmszLXkzNzPFpyZ4Uk0hntf7oum00JesViHM7"  # Dein Secret Key von Stripe
+stripe.api_key = "sk_test_51RjIRVD6YuO3EM7xUfa6VRRR8JRJjE2uhuzUN7zTLUn9QqYRebXWoNA7CQHHovmszLXkzNzPFpyZ4Uk0hntf7oum00JesViHM7"
 YOUR_DOMAIN = "http://localhost:5000"  #https://docs.stripe.com/checkout/fulfillment
 app = Flask(__name__, instance_relative_config=True) #https://claude.ai/share/644c973d-59db-4614-8e57-cf71e15b4903 to fix multiple instance folder bug
 
@@ -120,7 +120,7 @@ def logout():
     logout_user()
     return redirect(url_for("index"))
 
-    
+
 #upload cheatsheets with html input https://www.youtube.com/watch?v=GQLRVhXnZkE&t=127s bis 4:40 und https://www.youtube.com/watch?v=pPSZpCVRbvQ gesamt
 @app.route("/upload/", methods=["GET", "POST"])
 @login_required
@@ -131,6 +131,7 @@ def upload():
 
     # POST: Daten verarbeiten
     title = request.form.get("title")
+    courseOfStudy = request.form.get("courseOfStudy")
     description = request.form.get("description")
     file = request.files.get("file")
     module = request.form.get("module")
@@ -148,6 +149,10 @@ def upload():
     
     if not module:
         flash("Modul darf nicht leer sein.")
+        return redirect(url_for("upload"))
+    
+    if not courseOfStudy:
+        flash("Studiengang darf nicht leer sein.")
         return redirect(url_for("upload"))
     
     if not professor:
@@ -169,6 +174,7 @@ def upload():
             pdf_datei=file.read(),
             user_id=current_user.id,
             professor=professor,
+            courseOfStudy = courseOfStudy,
             module=module,
         )
         db.session.add(new_sheet)
