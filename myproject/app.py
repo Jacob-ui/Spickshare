@@ -426,6 +426,34 @@ def admin_required(func): #https://www.freecodecamp.org/news/python-decorators-e
     return check
 
 
+@app.route("/all-cheatsheets/")
+@admin_required
+def all_cheatsheets(): #https://youtu.be/80b8n3ib7jo?t=336
+    cheatsheets = Cheatsheet.query.all()
+
+    cheatsheets_data = []
+    for cheatsheet in cheatsheets:
+        cheatsheet_dict = {
+         'id': cheatsheet.id,
+            'title': cheatsheet.title,
+            'description': cheatsheet.description,
+            'creditcost': cheatsheet.creditcost,
+            'module': cheatsheet.module,
+            'professor': cheatsheet.professor,
+            'user_id': cheatsheet.user_id,
+            'votes': cheatsheet.votes,
+            'created_at': cheatsheet.created_at.isoformat() if cheatsheet.created_at else None, 
+            'has_pdf': cheatsheet.pdf_datei is not None 
+        }
+        cheatsheets_data.append(cheatsheet_dict)
+
+    return jsonify({
+        'status': 'success',
+        'count': len(cheatsheets_data),
+        'cheatsheets': cheatsheets_data
+    })
+
+
 # DB
 #@app.route("/create-tables")
 #def create_tables():
@@ -437,7 +465,7 @@ def admin_required(func): #https://www.freecodecamp.org/news/python-decorators-e
 def insert_sample():
     try:
         if User.query.first():
-            return "Daten existieren bereits!"
+           return "Daten existieren bereits!"
         user1 = User(email="cooperwoolley@gmail.com", username="Cooper", pw=generate_password_hash("Cooper"), credits=100, userart="admin")
         user2 = User(email="jacobgotter@gmail.com", username="Jacob", pw=generate_password_hash("Jacob"), credits=101, userart="admin")
 
