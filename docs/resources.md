@@ -118,3 +118,7 @@
   - [JS Bundle](https://getbootstrap.com/docs/5.1/getting-started/introduction/) – *Bootstrap Documentation*  
   - [JS Bundle CDN](https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js) – *jsDelivr CDN*  
   - [Bug Fix](https://claude.ai/share/4247021c-b55b-40d8-aefd-1b2ca95f3a8a)
+
+- **16.07.2025
+  Implemented Admin_required decorator, used online guide:
+  - [Decorator] (https://www.freecodecamp.org/news/python-decorators-explained-with-examples/)
