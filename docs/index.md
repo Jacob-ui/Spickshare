@@ -27,6 +27,9 @@ Gute Inhalte werden durch **Upvotes** belohnt und bringen den Ersteller:innen **
 
 Nach erfolgreicher Verifizierung (z. B. Telefonnummer) erhalten neue Nutzer:innen einen kostenlosen Start-Coin. Vorschaufunktionen ermöglichen einen ersten Einblick in ein Dokument vor dem Download.
 
+## Stripe
+
+Durch Stripe können Simulierte Käufe durch ausgedachte Einträge z.B. ausgedachten Namen, Email-Adressen, etc. getätigt werden, solange die Kartennummer: 4242 4242 4242 4242 genutzt wird. 
 ---
 
 ## Teammitglieder
