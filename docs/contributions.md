@@ -26,6 +26,7 @@ Contributions
 : Flash Messages implementiert
 : Bug fixes bei anderen Funktionen getätigt wie voting
 : Manche HTML Seiten erstellt wie buy_credits, login, register
+: Admin_required Decorator + Headless JSON API
 
 ## Jacob Gotter
 
