@@ -120,5 +120,8 @@
   - [Bug Fix](https://claude.ai/share/4247021c-b55b-40d8-aefd-1b2ca95f3a8a)
 
 - **16.07.2025
-  Implemented Admin_required decorator, used online guide:
-  - [Decorator] (https://www.freecodecamp.org/news/python-decorators-explained-with-examples/)
+  Admin_required Decorator hinzugefügt, Guide verwendet:
+  - [Decorator] (https://www.freecodecamp.org/news/python-decorators-explained-with-examples/) *freeCodeCamp*
+
+  All_cheatsheets Funktion implementiert in Form von headless json API, Youtube Tutorial verwendet:
+  - [Return JSON Object] (https://youtu.be/80b8n3ib7jo?t=336) *Finxter AI Nuggets*
