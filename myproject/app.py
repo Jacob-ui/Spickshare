@@ -8,6 +8,7 @@ from io import BytesIO #https://youtu.be/pPSZpCVRbvQ?t=322
 import PyPDF2 as pdf #https://youtu.be/OdIHUdQ1-eQ?t=99
 from sqlalchemy import func
 import stripe #https://docs.stripe.com/api?lang=python
+from functools import wraps #https://www.freecodecamp.org/news/python-decorators-explained-with-examples/
 
 stripe.api_key = "sk_test_51RjIRVD6YuO3EM7xUfa6VRRR8JRJjE2uhuzUN7zTLUn9QqYRebXWoNA7CQHHovmszLXkzNzPFpyZ4Uk0hntf7oum00JesViHM7"  # Dein Secret Key von Stripe
 YOUR_DOMAIN = "http://localhost:5000"  #https://docs.stripe.com/checkout/fulfillment
@@ -414,6 +415,15 @@ def account(): #https://www.tutorialspoint.com/sqlalchemy/sqlalchemy_orm_working
     ).scalar() or 0
 
     return render_template("account.html", user = current_user, cheatsheet_access = cheatsheet_access, uploaded_cheatsheets=uploaded_cheatsheets, total_likes=total_likes)
+
+def admin_required(func): #https://www.freecodecamp.org/news/python-decorators-explained-with-examples/
+
+    @wraps(func)
+    def check(*args, **kwargs):
+        if not current_user.is_authenticated or current_user.userart != "admin":
+            return redirect(url_for("index"))
+        return func(*args, **kwargs)
+    return check
 
 
 # DB
