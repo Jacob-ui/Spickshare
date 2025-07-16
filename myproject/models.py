@@ -33,11 +33,6 @@ class Cheatsheet(db.Model):
     votes = db.Column(db.Integer, default=0, nullable=False)
     created_at = db.Column(db.DateTime, default=func.now())
 
-class Order(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    creditamout = db.Column(db.Integer, nullable=False)
-
 class UserCheatsheetAccess(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False, primary_key=True)
     cheatsheet_id = db.Column(db.Integer, db.ForeignKey('cheatsheet.id'), nullable=False, primary_key=True)

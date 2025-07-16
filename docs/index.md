@@ -9,7 +9,7 @@ nav_order: 5
 ## Inhaltsverzeichnis
 
 - [Value Proposition](value-proposition.md)
-- [Resources](resources.md)
+- [Documentation by dates and resources](resources.md)
 - [Contributions](contributions.md)
 - [Goals](goals.md)
 - [Peer Review](peer-review.md)
