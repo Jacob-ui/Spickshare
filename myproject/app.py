@@ -51,8 +51,28 @@ def start():
 
 @app.route("/index/")
 def index():
-    cheatsheets = Cheatsheet.query.order_by(Cheatsheet.votes.desc()).all()  #https://www.youtube.com/watch?v=0_AoM58PSlA  
-    return render_template("index.html", cheatsheets=cheatsheets, user=current_user) #https://youtu.be/dam0GPOAvVI?t=7011
+        # Filterwerte aus der URL lesen (GET-Parameter)
+    study_filter = request.args.get('study')
+    prof_filter = request.args.get('prof')
+    module_filter = request.args.get('module')
+
+    # Cheatsheets abfragen und filtern https://www.youtube.com/watch?v=xX1pQAJmseE&embeds_referring_euri=https%3A%2F%2Fchatgpt.com%2F&source_ve_path=MzY4NDIsMjM4NTE
+    query = Cheatsheet.query
+
+    if study_filter:
+        query = query.filter_by(courseOfStudy=study_filter)
+    if prof_filter:
+        query = query.filter_by(professor=prof_filter)
+    if module_filter:
+        query = query.filter_by(module=module_filter)
+    cheatsheets = query.order_by(Cheatsheet.votes.desc()).all()  #https://www.youtube.com/watch?v=0_AoM58PSlA  
+
+    all_studies = [r[0] for r in db.session.query(Cheatsheet.courseOfStudy).distinct()] #r[0] ist erster Wert aus jedem Tupel, for r in... Query, die unterschiedliche Studiengänge liefert
+    all_profs = [r[0] for r in db.session.query(Cheatsheet.professor).distinct()]
+    all_modules = [r[0] for r in db.session.query(Cheatsheet.module).distinct()]
+    
+    return render_template("index.html",cheatsheets=cheatsheets, user=current_user,
+    all_studies=all_studies, all_profs=all_profs, all_modules=all_modules, request=request) #https://youtu.be/dam0GPOAvVI?t=7011
 
 #Login:
 @app.route("/login/", methods=["GET", "POST"]) #https://youtu.be/dam0GPOAvVI?t=3449 für die GET und POST Teile des Codes
@@ -378,6 +398,8 @@ def vote():
         flash(f"Error updating vote: {str(e)}", "danger")
     
     return redirect(url_for("index"))
+
+
 
 @login_required
 def has_access(cheatsheet_id):

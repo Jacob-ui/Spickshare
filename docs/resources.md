@@ -119,9 +119,14 @@
   - [JS Bundle CDN](https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js) – *jsDelivr CDN*  
   - [Bug Fix](https://claude.ai/share/4247021c-b55b-40d8-aefd-1b2ca95f3a8a)
 
-- **16.07.2025
+- **16.07.2025**
   Admin_required Decorator hinzugefügt, Guide verwendet:
-  - [Decorator] (https://www.freecodecamp.org/news/python-decorators-explained-with-examples/) *freeCodeCamp*
+  - [Decorator](https://www.freecodecamp.org/news/python-decorators-explained-with-examples/) *freeCodeCamp*
 
   All_cheatsheets Funktion implementiert in Form von headless json API, Youtube Tutorial verwendet:
-  - [Return JSON Object] (https://youtu.be/80b8n3ib7jo?t=336) *Finxter AI Nuggets*
+  - [Return JSON Object](https://youtu.be/80b8n3ib7jo?t=336) *Finxter AI Nuggets*
+
+  Database Input with ChatGPT:
+  - [ChatGPT Generated db-input](https://chatgpt.com/share/68779b94-d70c-8000-9e59-0381c2f322e7)
+
+  - [WTForm Demo: SelectField](https://www.youtube.com/watch?v=xX1pQAJmseE&embeds_referring_euri=https%3A%2F%2Fchatgpt.com%2F&source_ve_path=MzY4NDIsMjM4NTE)
