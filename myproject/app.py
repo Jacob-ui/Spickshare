@@ -47,6 +47,7 @@ print("Instance path:", app.instance_path)
 print("Database path:", app.config["SQLALCHEMY_DATABASE_URI"])
 
 # Mail Config #https://www.youtube.com/watch?v=uE9ZesslPYU https://claude.ai/share/3d96b750-41c4-43ba-8e64-dfa4d9fa02af
+# Usually this private information would get stored in an env file for better security but since this is just a test gmail we don't see the need
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USERNAME'] = 'spickshare123@gmail.com'
