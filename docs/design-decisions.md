@@ -73,7 +73,7 @@ We decided to merge both concerns into a single table:
 UserCheatsheetAccess(user_id, cheatsheet_id, vote)
 This table tracks both access and the user's single allowed vote on a cheatsheet.
 
-##Status
+## Status
 Accepted - 2025-07-5
 
 ## Consequences
@@ -88,3 +88,32 @@ Accepted - 2025-07-5
 **Separate Votes table**
 - Pros: Clear separation of responsibilities, more flexible if voting expands
 - Cons: Requires additional joins and logic to enforce voting eligibility, Redundant storage of user_id and cheatsheet_id, higher complexity
+
+
+
+## Design Decision 4: Using Email Verification with itsdangerous and flask_mail Instead of Phone Verification with Firebase
+
+## Context
+We needed a user verification system for our Flask web application. Our initial idea was to verify users via phone number using Firebase Authentication, as it is commonly used in production applications for its higher trust level and better resistance to fake accounts.
+However, our project had specific restrictions: we were not allowed to use JavaScript or external programs. Phone verification with Firebase requires frontend JavaScript or additional setup that violated these constraints.
+Email verification using itsdangerous (for secure tokens) and flask_mail (to send verification links) emerged as a viable alternative. It integrates easily with Flask while not breaking any rules of our project.
+
+## Decision
+We decided to implement user verification via email using itsdangerous and flask_mail.
+
+## Status
+Accepted - 2025-07-18
+
+## Consequences
++ Compatible with our project’s technology and restriction requirements
++ Fully Python-based, no need for external frontend tools or JavaScript
++ Easily integrates with Flask's ecosystem and our existing user model
++ Free to use (no cost for sending emails in low volume via SMTP)
+- Slightly less secure than phone verification (email spoofing and disposable addresses are possible)
+- Easier for users to exploit if they use fake or temporary email services
+- Requires managing email sending and token expiration manually
+
+## Alternatives Considered
+**Phone Verification with Firebase**
+- Pros: More secure, harder to spoof, industry-standard in many production applications
+- Cons: Requires JavaScript and external dependencies, violates project restrictions, higher setup complexity and potential costs
