@@ -27,6 +27,7 @@ Contributions
 : Bug fixes bei anderen Funktionen getätigt wie voting
 : Manche HTML Seiten erstellt wie buy_credits, login, register
 : Admin_required Decorator + Headless JSON API
+: Email Verification
 
 ## Jacob Gotter
 

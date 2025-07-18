@@ -9,6 +9,8 @@ import PyPDF2 as pdf #https://youtu.be/OdIHUdQ1-eQ?t=99
 from sqlalchemy import func
 import stripe #https://docs.stripe.com/api?lang=python
 from functools import wraps #https://www.freecodecamp.org/news/python-decorators-explained-with-examples/
+from itsdangerous import URLSafeTimedSerializer #https://youtu.be/uE9ZesslPYU?t=62
+from flask_mail import Mail, Message #https://youtu.be/uE9ZesslPYU?t=62
 
 stripe.api_key = "sk_test_51RjIRVD6YuO3EM7xUfa6VRRR8JRJjE2uhuzUN7zTLUn9QqYRebXWoNA7CQHHovmszLXkzNzPFpyZ4Uk0hntf7oum00JesViHM7"
 YOUR_DOMAIN = "http://localhost:5000"  #https://docs.stripe.com/checkout/fulfillment
@@ -43,6 +45,19 @@ def load_user(user_id):
 
 print("Instance path:", app.instance_path)
 print("Database path:", app.config["SQLALCHEMY_DATABASE_URI"])
+
+# Mail Config #https://www.youtube.com/watch?v=uE9ZesslPYU https://claude.ai/share/3d96b750-41c4-43ba-8e64-dfa4d9fa02af
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USERNAME'] = 'spickshare123@gmail.com'
+app.config['MAIL_PASSWORD'] = 'ahsg qbzk gmmv grbc'
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+
+
+mail = Mail(app)
+
+s = URLSafeTimedSerializer(app.secret_key)
 
 # Startseite
 @app.route("/")
@@ -462,25 +477,94 @@ def all_cheatsheets(): #https://youtu.be/80b8n3ib7jo?t=336
     cheatsheets_data = []
     for cheatsheet in cheatsheets:
         cheatsheet_dict = {
-         'id': cheatsheet.id,
-            'title': cheatsheet.title,
-            'description': cheatsheet.description,
-            'creditcost': cheatsheet.creditcost,
-            'module': cheatsheet.module,
-            'professor': cheatsheet.professor,
-            'user_id': cheatsheet.user_id,
-            'votes': cheatsheet.votes,
-            'created_at': cheatsheet.created_at.isoformat() if cheatsheet.created_at else None, 
-            'has_pdf': cheatsheet.pdf_datei is not None 
+         "id": cheatsheet.id,
+            "title": cheatsheet.title,
+            "description": cheatsheet.description,
+            "creditcost": cheatsheet.creditcost,
+            "module": cheatsheet.module,
+            "professor": cheatsheet.professor,
+            "user_id": cheatsheet.user_id,
+            "votes": cheatsheet.votes,
+            "created_at": cheatsheet.created_at.isoformat() if cheatsheet.created_at else None, 
+            "has_pdf": cheatsheet.pdf_datei is not None 
         }
         cheatsheets_data.append(cheatsheet_dict)
 
     return jsonify({
-        'status': 'success',
-        'count': len(cheatsheets_data),
-        'cheatsheets': cheatsheets_data
+        "status": "success",
+        "count": len(cheatsheets_data),
+        "cheatsheets": cheatsheets_data
     })
 
+def generate_verification_token(email):
+    return s.dumps(email, salt="email-confirm")
+
+def confirm_verification_token(token, expiration=3600):
+    try:
+        email = s.loads(token, salt="email-confirm", max_age=expiration)
+        return email
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Error: {str(e)}")
+        return None
+    
+@app.route("/verification/", methods=["POST"]) #https://www.youtube.com/watch?v=uE9ZesslPYU https://claude.ai/share/3d96b750-41c4-43ba-8e64-dfa4d9fa02af
+@login_required
+def verification():
+    if request.method == "POST":
+        email = current_user.email
+        token = generate_verification_token(email)
+        verify_url = url_for("verify_email", token=token, _external=True)
+        
+        # Simple text email without HTML template
+        body_text = f"""
+        Hello {current_user.username},
+        
+        Please click on this link to verify your email:
+        {verify_url}
+        
+        This link will expire in 1 hour.
+        
+        If you didn't request this verification, please ignore this email.
+        """
+        
+        msg = Message(
+            subject="Please verify your email",
+            sender="spickshare123@gmail.com",  # Use your actual Gmail
+            recipients=[email],
+            body=body_text
+        )
+        
+        mail.send(msg)
+        flash("A verification email has been sent to your email address!")
+        return redirect(url_for('account'))
+    
+    return redirect(url_for("account"))
+
+@app.route("/verify-email/<token>")
+@login_required
+def verify_email(token):
+    email = confirm_verification_token(token)
+
+    try:    
+        if not email:
+            flash("The verification link is invalid or has expired")
+            return redirect(url_for("account"))
+        elif current_user.userart == "verified":
+            flash("You are already verified!")
+            return redirect(url_for("account"))
+        else: 
+            flash("Your email has been verified successfully!")
+            current_user.userart = "verified"
+            current_user.credits += 3
+            db.session.commit()
+
+    except Exception as e:
+            db.session.rollback()
+            flash(f"Database error: {str(e)}")
+
+    return redirect(url_for("account"))
+    
 
 # DB
 #@app.route("/create-tables")

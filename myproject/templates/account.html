@@ -23,9 +23,18 @@
                 <p><strong>Account Type:</strong> {{ user.userart }}</p>
             </div>
         </div>
-
+        {% if user.userart == "not verified" %}
+            <div class="mb-4">
+                <h4>Verify Account</h4>
+                <div class="border p-3 rounded">
+                    <form action="{{ url_for('verification') }}" method="POST" style="display: inline;">
+                        <button type="submit" class="btn btn-outline-danger">Send Verification Email</button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}    
         <div>
-           {% if cheatsheet_access %}
+{% if cheatsheet_access %}
     <div>
         <h4>Your Cheatsheets</h4>
         <div class="border rounded">

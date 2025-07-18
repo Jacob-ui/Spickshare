@@ -130,3 +130,8 @@
   - [ChatGPT Generated db-input](https://chatgpt.com/share/68779b94-d70c-8000-9e59-0381c2f322e7)
 
   - [WTForm Demo: SelectField](https://www.youtube.com/watch?v=xX1pQAJmseE&embeds_referring_euri=https%3A%2F%2Fchatgpt.com%2F&source_ve_path=MzY4NDIsMjM4NTE)
+
+- **18.07.2025**
+Implemented Email Verification, used Youtube Tutorial and claude.ai:
+- [Email Verification] (https://www.youtube.com/watch?v=uE9ZesslPYU) **Mailtrap**
+- [Bug Fixes] (https://claude.ai/share/3d96b750-41c4-43ba-8e64-dfa4d9fa02af)
