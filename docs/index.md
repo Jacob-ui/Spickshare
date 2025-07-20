@@ -16,6 +16,8 @@ nav_order: 5
 - [Improvements](improvements.md)
 - [Database](db.md)
 - [Design Decisions We Made](design-decisions.md)
+- [README](README.md)
+
 
 
 ---
