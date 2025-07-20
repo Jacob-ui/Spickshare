@@ -30,6 +30,7 @@ Nach erfolgreicher Verifizierung (z. B. Telefonnummer) erhalten neue Nutzer:in
 ## Stripe
 
 Durch Stripe können Simulierte Käufe durch ausgedachte Einträge z.B. ausgedachten Namen, Email-Adressen, etc. getätigt werden, solange die Kartennummer: 4242 4242 4242 4242 genutzt wird. 
+
 ---
 
 ## Teammitglieder

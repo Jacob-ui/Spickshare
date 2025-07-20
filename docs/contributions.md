@@ -31,8 +31,10 @@ Contributions
 : Admin_required Decorator + Headless JSON API
 : Email Verification
 
-## Contributions
+---
 
+## Jacob Gotter
+Contributions
 : Entwurf des Datenbankschemas  
 : Anlegen des Repositorys  
 : Einfügen des To-Do Codes aus den Vorlesungen  
