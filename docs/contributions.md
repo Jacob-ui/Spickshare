@@ -1,11 +1,11 @@
 ---
 title: Contributions
 parent: Team Evaluation
-nav_order: 4
+nav_order: 7
 ---
 
 {: .no_toc }
-# Summary of individual contributions
+# Contributions (chronologisch sortiert)
 
 <details open markdown="block">
 {: .text-delta }
@@ -13,6 +13,8 @@ nav_order: 4
 + ToC
 {: toc }
 </details>
+
+---
 
 ## Cooper Woolley
 

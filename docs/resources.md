@@ -1,3 +1,20 @@
+---
+title: Dokumentation und Ressourcen
+parent: Team Evaluation
+nav_order: 4
+---
+
+{: .no_toc }
+# Dokumentation und Ressourcen (chronologisch sortiert)
+
+<details open markdown="block">
+{: .text-delta }
+<summary>Table of contents</summary>
++ ToC
+{: toc }
+</details>
+
+---
 # Dokumentation und Ressourcen
 
 - **12.05.**  

@@ -1,3 +1,21 @@
+---
+title: Database
+parent: Team Evaluation
+nav_order: 6
+---
+
+{: .no_toc }
+# Database (vorher und nachher)
+
+<details open markdown="block">
+{: .text-delta }
+<summary>Table of contents</summary>
++ ToC
+{: toc }
+</details>
+
+---
+
 # Database
 
 ## Datenbankstruktur: Vorher-Nachher-Vergleich

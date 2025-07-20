@@ -1,6 +1,20 @@
 ---
+title: Goal definition
+parent: Team Evaluation
+nav_order: 2
+---
 
-## Benutzerrollen: Admin & Verifiziert
+{: .no_toc }
+# Goal definition (chronologisch sortiert)
+
+<details open markdown="block">
+{: .text-delta }
+<summary>Table of contents</summary>
++ ToC
+{: toc }
+</details>
+
+---
 
 **Goal Definition**  
 : Verschiedene Nutzerrollen sollen unterschiedliche Rechte erhalten – z. B. Admins für Management-Funktionen, verifizierte Nutzer mit mehr Vertrauen.

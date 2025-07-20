@@ -1,12 +1,11 @@
 ---
-title: Peer Review
+title: Peer-review
 parent: Team Evaluation
-nav_order: 3
+nav_order: 6
 ---
 
-
 {: .no_toc }
-# Peer review
+# Peer-review (chronologisch sortiert)
 
 <details open markdown="block">
 {: .text-delta }
@@ -14,6 +13,8 @@ nav_order: 3
 + ToC
 {: toc }
 </details>
+
+---
 
 ## Jacob – Review for Cooper Woolley
 

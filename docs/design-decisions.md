@@ -1,28 +1,18 @@
-# Design Decisions (chronologisch sortiert)
-
+---
+title: Design Decisions
+parent: Team Evaluation
+nav_order: 3
 ---
 
-## Designentscheidung 7: Nutzung von Flask-Login’s `@login_required` Dekorator für Schutz wichtiger Routen
+{: .no_toc }
+# Design Decisions (chronologisch sortiert)
 
-### Kontext  
-Wichtige Routen wie Credit-Kauf, Cheatsheet-Kauf, Voting und Account-Verwaltung müssen nur für angemeldete Nutzer zugänglich sein.
-
-### Entscheidung  
-Wir verwenden Flask-Login’s `@login_required` Dekorator, um Authentifizierung auf diesen Routen sicherzustellen.
-
-### Status  
-Akzeptiert – 2025-06-20
-
-### Konsequenzen  
-+ Standardisierte und saubere Zugriffskontrolle auf Routenebene  
-+ Reduziert Boilerplate-Code dank Wiederverwendung von Flask-Login Features  
-+ Gute Integration in Session-Management und Nutzerstatus  
-- Kann neue Nutzer frustrieren, wenn Anmeldung als Voraussetzung nicht klar kommuniziert wird
-
-### Alternative Überlegungen  
-**Manuelle Authentifizierungsprüfungen in den Funktionen**  
-- Vorteile: Volle Kontrolle  
-- Nachteile: Fehleranfälliger und weniger wartbar
+<details open markdown="block">
+{: .text-delta }
+<summary>Table of contents</summary>
++ ToC
+{: toc }
+</details>
 
 ---
 
@@ -75,6 +65,30 @@ Accepted – 2025-06-29
 
 ---
 
+## Designentscheidung 7: Nutzung von Flask-Login’s `@login_required` Dekorator für Schutz wichtiger Routen
+
+### Kontext  
+Wichtige Routen wie Credit-Kauf, Cheatsheet-Kauf, Voting und Account-Verwaltung müssen nur für angemeldete Nutzer zugänglich sein.
+
+### Entscheidung  
+Wir verwenden Flask-Login’s `@login_required` Dekorator, um Authentifizierung auf diesen Routen sicherzustellen.
+
+### Status  
+Akzeptiert – 2025-06-30
+
+### Konsequenzen  
++ Standardisierte und saubere Zugriffskontrolle auf Routenebene  
++ Reduziert Boilerplate-Code dank Wiederverwendung von Flask-Login Features  
++ Gute Integration in Session-Management und Nutzerstatus  
+- Kann neue Nutzer frustrieren, wenn Anmeldung als Voraussetzung nicht klar kommuniziert wird
+
+### Alternative Überlegungen  
+**Manuelle Authentifizierungsprüfungen in den Funktionen**  
+- Vorteile: Volle Kontrolle  
+- Nachteile: Fehleranfälliger und weniger wartbar
+
+---
+
 ## Design Decision 3: Combining Votes and UserCheatsheetAccess into a single table
 
 ### Context  
@@ -84,7 +98,7 @@ Getrennte Tabellen für Kaufzugriff und Votes führten zu Redundanz und komplexe
 Zusammenführung in eine Tabelle UserCheatsheetAccess(user_id, cheatsheet_id, vote).
 
 ### Status  
-Accepted - 2025-07-05
+Accepted – 2025-07-05
 
 ### Consequences  
 + Einfacheres Schema ohne doppelte Foreign Keys  
@@ -204,7 +218,7 @@ User-Verifikation sollte ohne JS oder externe Programme funktionieren, Firebase 
 Implementierung der Email-Verifikation via itsdangerous und flask_mail.
 
 ### Status  
-Accepted - 2025-07-18
+Accepted – 2025-07-18
 
 ### Consequences  
 + Kompatibel mit Projektrestriktionen, komplett in Python  
@@ -217,3 +231,5 @@ Accepted - 2025-07-18
 ### Alternatives Considered  
 **Phone Verification mit Firebase**  
 - Sicherer, aber nicht kompatibel mit Projektanforderungen, komplexer
+
+---

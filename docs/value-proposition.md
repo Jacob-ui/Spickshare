@@ -1,5 +1,20 @@
-value_proposition = """
-# Value Proposition: Spickshare
+---
+title: Value-proposition
+parent: Team Evaluation
+nav_order: 1
+---
+
+{: .no_toc }
+# Value-proposition (chronologisch sortiert)
+
+<details open markdown="block">
+{: .text-delta }
+<summary>Table of contents</summary>
++ ToC
+{: toc }
+</details>
+
+---
 
 ### Skizze des Nutzenversprechens der App:
 - Spickshare ist eine zentrale Plattform, auf der Studierende ihre Spickzettel unkompliziert hochladen, teilen und verkaufen können – eine Art Marktplatz für hochwertige Lernmaterialien.
