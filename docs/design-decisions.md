@@ -1,119 +1,219 @@
-## Design Decisions we made
+# Design Decisions (chronologisch sortiert)
 
+---
 
+## Designentscheidung 7: Nutzung von Flask-Login’s `@login_required` Dekorator für Schutz wichtiger Routen
+
+### Kontext  
+Wichtige Routen wie Credit-Kauf, Cheatsheet-Kauf, Voting und Account-Verwaltung müssen nur für angemeldete Nutzer zugänglich sein.
+
+### Entscheidung  
+Wir verwenden Flask-Login’s `@login_required` Dekorator, um Authentifizierung auf diesen Routen sicherzustellen.
+
+### Status  
+Akzeptiert – 2025-06-20
+
+### Konsequenzen  
++ Standardisierte und saubere Zugriffskontrolle auf Routenebene  
++ Reduziert Boilerplate-Code dank Wiederverwendung von Flask-Login Features  
++ Gute Integration in Session-Management und Nutzerstatus  
+- Kann neue Nutzer frustrieren, wenn Anmeldung als Voraussetzung nicht klar kommuniziert wird
+
+### Alternative Überlegungen  
+**Manuelle Authentifizierungsprüfungen in den Funktionen**  
+- Vorteile: Volle Kontrolle  
+- Nachteile: Fehleranfälliger und weniger wartbar
+
+---
 
 ## Design Decision 1: Choosing Flask_login over Flask Session for User Authentification and Session Management
 
-## Context
-We need to authenticate users in our web application so that only registered users can upload, download, or vote on cheatsheets. The authentication system must persist the login state across requests and allow route-level protection (e.g., only logged-in users can vote).
+### Context  
+Wir brauchen eine Authentifizierung, die Login-Zustand über Requests bewahrt und Routen schützt. Anfangs wollten wir Flask `session` manuell nutzen.
 
-Initially, we considered using Flask's built-in `session` to store a `user_id` and manually manage authentication and access control.
+### Decision  
+Wir entschieden uns für das `flask_login`-Extension.
 
-## Decision
-We decided to use the `flask_login` extension to handle authentication and session management.
-
-## Status
+### Status  
 Accepted – 2025-06-29
 
-## Consequences
-+ Simplifies login/logout/session handling using standard decorators like `@login_required`
-+ Provides built-in support for current user management via `current_user`
-+ Forces a clean user model with required methods (`is_authenticated`, `get_id`, etc.)
-+ Cleaner route protection and user state checks
-- Requires a dedicated `User` class and integration with a persistent storage system, until now we have     only used raw sql for the database, the mandatory use of classes would make this more complicated
-- Adds a third-party dependency to the project
+### Consequences  
++ Vereinfachte Login/Logout und Session-Handling mit Standard-Decorator `@login_required`  
++ Built-in `current_user` Management  
++ Saubere User-Model Anforderungen  
+- Erfordert dedizierte User-Klasse und Persistenzsystem  
+- Fügt Drittanbieter-Abhängigkeit hinzu
 
-## Alternatives Considered
-**Manual session handling using Flask's `session`:**
-- Pros: Lightweight, no dependencies
-- Cons: easy to make security mistakes, no built-in route protection, must create all functions excluding storing user data manually
+### Alternatives Considered  
+**Manuelles Session Handling**  
+- Leichtgewichtig, aber fehleranfällig und ohne eingebaute Schutzmechanismen
 
+---
 
+## Design Decision 2: Adopting SQLAlchemy instead of Raw SQL for Database Interaction
 
-# Design Decision 2: Adopting SQLAlchemy instead of Raw SQL for Database Interaction
+### Context  
+Bisher Roh-SQL genutzt, aber für `flask_login` brauchen wir eine User-Klasse, was zu SQLAlchemy ORM nahelegt.
 
-## Context
-We initially used raw SQL queries to interact with our SQLite database since we were already familiar with SQL. This allowed precise control over queries but required a lot of boring and repetitive code and manual connection handling.
+### Decision  
+Umstieg auf SQLAlchemy ORM.
 
-When integrating `flask_login`, we needed a `User` class with specific attributes and methods. This naturally pointed toward using SQLAlchemy's ORM (Object Relational Mapping) with class-based models.
-
-## Decision
-We decided to use SQLAlchemy's features to define and access our database models.
-
-## Status
+### Status  
 Accepted – 2025-06-29
 
-## Consequences
-+ Cleaner, reusable code with declarative class-based models
-+ Full integration with Flask and `flask_login`
-+ Easier relationship management between users, cheatsheets, and votes
-+ Easier to refactor and migrate in the future
-- Requires us to completely rewrite our existing code
-- Requires learning the SQLAlchemy ORM API
-- Slight abstraction overhead over raw SQL
+### Consequences  
++ Klarere, wiederverwendbare Klasse-basierte Modelle  
++ Leichtere Integration mit Flask und `flask_login`  
++ Einfacheres Beziehungsmanagement  
+- Bestehenden Code komplett neu schreiben  
+- Lernaufwand für ORM  
+- Kleine Abstraktionskosten
 
-## Alternatives Considered
-**Raw SQL queries:**
-- Pros: Direct, transparent, and highly performant
-- Cons: Boring, repetitive, error-prone, hard to maintain and scale, more complicated to combine with flask_login
+### Alternatives Considered  
+**Raw SQL**  
+- Direkt und performant, aber repetitiv und schwieriger wartbar
 
+---
 
+## Design Decision 3: Combining Votes and UserCheatsheetAccess into a single table
 
-# Design Decision 3: Combining Votes and UserCheatsheetAccess into a single table
+### Context  
+Getrennte Tabellen für Kaufzugriff und Votes führten zu Redundanz und komplexen Joins.
 
-## Context
-Initially, we had planned to use two separate tables:
-UserCheatsheetAccess(user_id, cheatsheet_id) to track which users have purchased which cheatsheets
-Votes(user_id, cheatsheet_id, vote) to record user votes (upvotes/downvotes)
+### Decision  
+Zusammenführung in eine Tabelle UserCheatsheetAccess(user_id, cheatsheet_id, vote).
 
-However, this approach introduced redundant data (duplicate foreign keys) and required additional logic to enforce that users could only vote if they had access. It also complicated queries, requiring joins and cross-table validations to check access and voting eligibility.
+### Status  
+Accepted - 2025-07-05
 
-## Decision
-We decided to merge both concerns into a single table:
-UserCheatsheetAccess(user_id, cheatsheet_id, vote)
-This table tracks both access and the user's single allowed vote on a cheatsheet.
+### Consequences  
++ Einfacheres Schema ohne doppelte Foreign Keys  
++ Erzwingt „ein Vote pro User pro Cheatsheet“  
++ Einfachere Abfragen für Zugriff und Vote  
+- Tabelle übernimmt zwei Verantwortungen (Zugriff + Voting)  
+- Könnte bei Voting-Erweiterungen Refactoring brauchen
 
-## Status
-Accepted - 2025-07-5
+### Alternatives Considered  
+**Separate Votes-Tabelle**  
+- Klare Verantwortlichkeiten, aber komplexere Queries
 
-## Consequences
-+ Simplified database schema with no duplicated foreign key combinations
-+ Enforces "one vote per user per cheatsheet" by design
-+ Easy to check both access and vote status in one query
-+ Reduces logic complexity in both backend routes and templates
-+ The UserCheatsheetAccess table now has dual responsibility (access + voting)
-- May require refactoring if voting logic expands in the future (e.g., vote history, reaction types)
+---
 
-## Alternatives Considered
-**Separate Votes table**
-- Pros: Clear separation of responsibilities, more flexible if voting expands
-- Cons: Requires additional joins and logic to enforce voting eligibility, Redundant storage of user_id and cheatsheet_id, higher complexity
+## Designentscheidung 6: Zugriffskontrolle durch Zusammenführen von Cheatsheet-Kauf und Voting in UserCheatsheetAccess
 
+### Kontext  
+Nutzer dürfen nur abstimmen, wenn sie Cheatsheet gekauft haben.
 
+### Entscheidung  
+Wir prüfen Voting-Berechtigung anhand des Eintrags in UserCheatsheetAccess, der Kauf und Vote speichert.
+
+### Status  
+Akzeptiert – 2025-07-06
+
+### Konsequenzen  
++ Einfachere Prüfungen durch eine Tabelle  
++ Verhindert unberechtigte Votes  
++ Atomare Vote-Updates mit Gesamtvotes-Anpassung  
+- Komplexere Vote-Updates wegen Differenzen  
+- Tabelle hat Doppelverantwortung (Kauf + Voting)
+
+### Alternative Überlegungen  
+**Separate Votes-Tabelle**  
+- Klare Trennung, aber mehr Joins und Logik
+
+---
+
+## Designentscheidung 9: Nutzung eines Flask Context Processors, um `has_access` in Templates verfügbar zu machen
+
+### Kontext  
+Templates brauchen Zugriff auf Funktion, um User-Zugriff auf Cheatsheets zu prüfen.
+
+### Entscheidung  
+Funktion `has_access` wird per Context Processor an Templates übergeben.
+
+### Status  
+Akzeptiert – 2025-07-06
+
+### Konsequenzen  
++ Kurze, wiederverwendbare Zugriffskontrolle in Templates  
++ Bessere Trennung von Logik und Darstellung  
+- Mögliche Performance-Auswirkungen bei vielen Anfragen (evtl. Caching nötig)
+
+### Alternative Überlegungen  
+**Explizites Übergeben in Render-Aufrufen**  
+- Expliziter, aber mehr Aufwand und Fehleranfälligkeit
+
+---
+
+## Designentscheidung 5: Integration von Stripe Checkout für den Kauf von Credits
+
+### Kontext  
+Nutzer sollen Credits sicher und zuverlässig per Kreditkarte kaufen können.
+
+### Entscheidung  
+Integration von Stripe Checkout.
+
+### Status  
+Akzeptiert – 2025-07-14
+
+### Konsequenzen  
++ PCI-konformer, sicherer Zahlungsablauf mit minimalem Backend-Aufwand  
++ Verwaltung von Zahlungsarten und Sessions über Stripe API  
++ Verknüpfung von Zahlungen mit Nutzer und Credits über Metadata  
+- Drittanbieter-Abhängigkeit und sichere API-Schlüssel-Verwaltung nötig  
+- Zahlungsbestätigung muss sicher (auch asynchron) erfolgen  
+- Abhängigkeit vom externen Dienst mit Ausfallrisiko
+
+### Alternative Überlegungen  
+**Manuelles Creditsystem ohne Zahlung**  
+- Einfach, aber kein Umsatz und unsicher  
+**Andere Payment-Provider**  
+- Unterschiedliche Gebühren und Features, aber aufwendiger
+
+---
+
+## Designentscheidung 8: Rollenbasierte Zugriffskontrolle mittels eigenem `admin_required` Dekorator
+
+### Kontext  
+Admin-Funktionen sollen nur für Admins zugänglich sein.
+
+### Entscheidung  
+Eigenen `admin_required` Decorator erstellt, der Rolle prüft.
+
+### Status  
+Akzeptiert – 2025-07-16
+
+### Konsequenzen  
++ Einfache und zentrale Zugriffskontrolle für Admins  
++ Wiederverwendbar und erweiterbar  
+- Rollenmanagement muss gepflegt werden  
+- Keine fein granulare Berechtigungssteuerung
+
+### Alternative Überlegungen  
+**RBAC-Bibliotheken wie Flask-Principal**  
+- Mehr Flexibilität, aber komplexer
+
+---
 
 ## Design Decision 4: Using Email Verification with itsdangerous and flask_mail Instead of Phone Verification with Firebase
 
-## Context
-We needed a user verification system for our Flask web application. Our initial idea was to verify users via phone number using Firebase Authentication, as it is commonly used in production applications for its higher trust level and better resistance to fake accounts.
-However, our project had specific restrictions: we were not allowed to use JavaScript or external programs. Phone verification with Firebase requires frontend JavaScript or additional setup that violated these constraints.
-Email verification using itsdangerous (for secure tokens) and flask_mail (to send verification links) emerged as a viable alternative. It integrates easily with Flask while not breaking any rules of our project.
+### Context  
+User-Verifikation sollte ohne JS oder externe Programme funktionieren, Firebase Telefon-Verifikation passt nicht.
 
-## Decision
-We decided to implement user verification via email using itsdangerous and flask_mail.
+### Decision  
+Implementierung der Email-Verifikation via itsdangerous und flask_mail.
 
-## Status
+### Status  
 Accepted - 2025-07-18
 
-## Consequences
-+ Compatible with our project’s technology and restriction requirements
-+ Fully Python-based, no need for external frontend tools or JavaScript
-+ Easily integrates with Flask's ecosystem and our existing user model
-+ Free to use (no cost for sending emails in low volume via SMTP)
-- Slightly less secure than phone verification (email spoofing and disposable addresses are possible)
-- Easier for users to exploit if they use fake or temporary email services
-- Requires managing email sending and token expiration manually
+### Consequences  
++ Kompatibel mit Projektrestriktionen, komplett in Python  
++ Einfache Integration in Flask und User-Modell  
++ Kostenlos bei niedrigem Versandvolumen  
+- Weniger sicher als Telefon-Verifikation (Email-Spoofing möglich)  
+- Nutzer können Fake/Temporäre Emails nutzen  
+- E-Mail Versand und Token-Verwaltung müssen manuell gehandhabt werden
 
-## Alternatives Considered
-**Phone Verification with Firebase**
-- Pros: More secure, harder to spoof, industry-standard in many production applications
-- Cons: Requires JavaScript and external dependencies, violates project restrictions, higher setup complexity and potential costs
+### Alternatives Considered  
+**Phone Verification mit Firebase**  
+- Sicherer, aber nicht kompatibel mit Projektanforderungen, komplexer

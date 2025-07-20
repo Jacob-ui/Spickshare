@@ -5,37 +5,63 @@
 ### Planung (vorher)
 
 #### User  
-• Id (PK), pw (String), username (String), credits (Int), Userart (String), email (String)
+• id (PK), pw (String), username (String), credits (Int), userart (String), email (String)
 
 #### CheatSheet  
-• Id (PK), Title (String), creditCosts (Int), pdf-datei (pdf), prof_id (FK), module_id (FK), user_id (FK), votes (Int)
+• id (PK), title (String), creditCosts (Int), pdf_datei (pdf), prof_id (FK), module_id (FK), user_id (FK), votes (Int)
 
 #### Votes  
-• Id (PK), User_Id (FK), CheatSheet_Id (FK), upvotes (Boolean), downvotes (Boolean)
+• id (PK), user_id (FK), cheatsheet_id (FK), upvotes (Boolean), downvotes (Boolean)
 
 #### Orders  
-• Invoicenumber (PK), user_id (FK), creditamount (Int)
+• invoicenumber (PK), user_id (FK), creditamount (Int)
 
 #### UnlockedCheatSheet  
-• User_Id (FK), Cheatsheet_id (FK)
+• user_id (FK), cheatsheet_id (FK)
 
 #### Modules  
-• Id (PK), Name (String)
+• id (PK), name (String)
 
 #### Prof  
-• Id (PK), Module_ID (FK), Name (String)
+• id (PK), module_id (FK), name (String)
 
+---
 
 ### Umsetzung (nachher)
 
 #### user  
-• id (PK), email (String), username (String), pw (String), credits (Int), userart (String)
+• `id` (PK)  
+• `email` (String, unique, not null)  
+• `username` (String, unique, not null)  
+• `pw` (String, not null)  
+• `credits` (Int, default = 0)  
+• `userart` (String, default = "not verified")  
 
 #### cheatsheet  
-• id (PK), title (String), description (String), creditcost (Int), pdf_datei (Datei), module (String), professor (String), user_id (FK), votes (Int), created_at (Timestamp)
+• `id` (PK)  
+• `title` (String, not null)  
+• `description` (String, not null)  
+• `courseOfStudy` (String, not null)  
+• `creditcost` (Int, default = 1)  
+• `pdf_datei` (Binary, not null)  
+• `module` (String, not null)  
+• `professor` (String, not null)  
+• `user_id` (FK to user.id, nullable)  
+• `votes` (Int, default = 0)  
+• `created_at` (Timestamp, default = current time)  
 
 #### user_cheatsheet_access  
-• user_id (FK), cheatsheet_id (FK), vote (Int) // 1 = Upvote, -1 = Downvote, 0 = kein Vote
+• `user_id` (FK to user.id, PK)  
+• `cheatsheet_id` (FK to cheatsheet.id, PK)  
+• `vote` (Int, default = 0)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ 1 = Upvote, -1 = Downvote, 0 = Kein Vote  
 
 #### order  
-• id (PK), user_id (FK), creditamount (Int)
+• `id` (PK)  
+• `user_id` (FK to user.id)  
+• `creditamount` (Int)
+
+---
+
+> **Hinweis zu Modulen & Professoren:**  
+> Ursprünglich geplante Tabellen `Module` und `Professor` wurden nicht implementiert. Stattdessen werden `module` und `professor` direkt als Strings im Cheatsheet gespeichert. Dies reduziert Komplexität, verhindert jedoch relationale Integrität.

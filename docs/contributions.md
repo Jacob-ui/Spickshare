@@ -29,15 +29,22 @@ Contributions
 : Admin_required Decorator + Headless JSON API
 : Email Verification
 
-## Jacob Gotter
+## Contributions
 
-Contributions
 : Entwurf des Datenbankschemas  
-: Anlegen des Repositorys
-: Einfügen des To-Do Codes aus den Vorlesungen
-: Erstellen der HTML Dateien
-: Login HTML erstellt
-: Startseite mit Login/Register Verknüpfung on-click
-: Funktionsfähige Voting Buttons hinzugefügt
-: Dokumentation und Pages auf GitHub eingerichtet
-: Template aus den Vorlesungen für GitHub Pages hinzugefügt
+: Anlegen des Repositorys  
+: Einfügen des To-Do Codes aus den Vorlesungen  
+: Erstellen der HTML-Dateien  
+: Login HTML erstellt  
+: Startseite mit Login/Register Verknüpfung via OnClick  
+: Funktionsfähige Voting-Buttons hinzugefügt  
+: Dokumentation und Pages auf GitHub eingerichtet  
+: Template aus den Vorlesungen für GitHub Pages hinzugefügt  
+: Filterfunktionen nach Professoren, Modulen und Studiengängen integriert  
+: Testeinträge in der Datenbank angelegt  
+: Flash-Nachrichten bei Login und Fehlern eingebaut  
+: Upload-Formular für neue Cheatsheets implementiert  
+: Stripe-Checkout-Seite mit API-Anbindung zur Credit-Aufladung erstellt  
+: Profilseite zur Ansicht der eigenen hochgeladenen Cheatsheets inkl. Like-Zähler programmiert  
+: Bootstrap zur Verbesserung des Designs
+

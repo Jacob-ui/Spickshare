@@ -1,92 +1,121 @@
 ---
-title: Goals
-parent: Team Evaluation
-nav_order: 1
----
 
-{: .no_toc }
-# Goals achieved and missed
-
-<details open markdown="block">
-{: .text-delta }
-<summary>Table of contents</summary>
-+ ToC
-{: toc }
-</details>
-
-## Verbesserung des Vote-Systems
+## Benutzerrollen: Admin & Verifiziert
 
 **Goal Definition**  
-: Nutzer sollen ein Spickzettel nur einmal bewerten können. Bisher konnte durch wiederholtes Klicken unendlich oft abgestimmt werden.
+: Verschiedene Nutzerrollen sollen unterschiedliche Rechte erhalten – z. B. Admins für Management-Funktionen, verifizierte Nutzer mit mehr Vertrauen.
 
 **Umsetzung**  
-: Die Votes wurden mit der Tabelle `user_cheatsheet_access` verknüpft. Jede Bewertung (Upvote/Downvote) wird dort pro User eindeutig gespeichert und mehrfaches Voting verhindert.
+: Die Rolle wird in der Spalte `userart` gespeichert (`admin`, `verified`, `not verified`). Admins haben Zugriff auf besondere Seiten wie `/all-cheatsheets/`. Verifizierte Nutzer erhalten Bonus-Credits und sind für weitere Features vorgesehen.
 
 ---
 
-## Datenbank lauffähig machen
+## E-Mail-Versand einrichten
 
 **Goal Definition**  
-: Die Datenbank soll initialisiert und vollständig angebunden werden. Login, Registrierung und Datenspeicherung müssen funktionieren.
+: Die Plattform soll in der Lage sein, automatisierte E-Mails zu verschicken (z. B. Verifizierungs-Links).
 
 **Umsetzung**  
-: Die Tabellen für User, Cheatsheets, Bestellungen und Zugriff wurden erfolgreich erstellt und verknüpft. Login und Registrierung funktionieren mit Passwort-Hashing, Nutzerrollen und Credits.
+: Integration von `Flask-Mail` mit SMTP-Zugang über Gmail. Die Konfiguration ist im Code hinterlegt (für Testumgebung fest verdrahtet). Die E-Mail enthält personalisierten Text und einen Token-Link zur Verifizierung.
 
 ---
 
-## Voting mit Datenbank verknüpfen
+## Vorbelegung der Datenbank (Insert Sample Data)
 
 **Goal Definition**  
-: Stimmen für ein Cheatsheet sollen in der Datenbank festgehalten und pro Nutzer nachvollziehbar sein.
+: Beim Starten der Anwendung soll es möglich sein, Testdaten für Nutzer zu generieren.
 
 **Umsetzung**  
-: Votes werden nun über die `user_cheatsheet_access`-Tabelle gespeichert und beim erneuten Aufruf ausgewertet, um Mehrfachabstimmungen zu verhindern.
+: Über den Endpunkt `/insert/sample` werden zwei Admin-Nutzer in die Datenbank geschrieben – mit Passwort-Hashing und Startguthaben. Dies vereinfacht die Entwicklungs- und Testphase.
 
 ---
 
-## Upload und Download von PDF-Dateien
+## Trennung von Upload und Zugriff (Access Control)
 
 **Goal Definition**  
-: Registrierte Nutzer sollen PDF-Dateien hochladen und (nach Kauf oder Freischaltung) herunterladen können.
+: Nur Nutzer mit gültigem Zugriff sollen Dateien herunterladen oder bewerten können.
 
 **Umsetzung**  
-: Der Upload funktioniert inklusive Beschreibung, Modul und Professorenangabe. Downloads sind nur für freigeschaltete Spickzettel möglich. Die Dateien werden serverseitig gespeichert und sicher zugeordnet.
+: Beim Download und Voting wird geprüft, ob der User das Cheatsheet gekauft hat. Ohne Kauf ist weder Download noch Voting möglich. Zugriff wird über die Tabelle `user_cheatsheet_access` geprüft.
 
 ---
 
-## Vorschau der Spickzettel
+## Flash-Nachrichten für Nutzerfeedback
 
 **Goal Definition**  
-: Vor dem Kauf soll ein Spickzettel teilweise angesehen werden können (z. B. Vorschauseite oder Bild).
+: Nutzer sollen direkt Rückmeldung zu Aktionen (Erfolg, Fehler, Warnungen) erhalten.
 
 **Umsetzung**  
-: Eine einfache Vorschaufunktion wurde vorbereitet. Aktuell wird ein Platzhalterbild oder eine reduzierte Seitenversion angezeigt. Weitere Optimierung (automatische Vorschaugenerierung) ist geplant.
+: Über Flask `flash()` werden Statusnachrichten erzeugt. Sie erscheinen bei Registrierung, Login, Upload, Voting, Käufen etc. Nachrichten sind nach Typen (success, error, danger) gegliedert.
 
 ---
 
-## Coins (Creditsystem)
+## PDF-Dateien sicher verarbeiten
 
 **Goal Definition**  
-: Nutzer erhalten beim Start kostenlose Coins, um erste Spickzettel testen zu können. Downloads kosten Coins, Uploads bringen keine.
+: Es dürfen nur gültige PDF-Dateien hochgeladen und verarbeitet werden.
 
 **Umsetzung**  
-: Jeder User startet mit einem Coin-Guthaben. Die Preise pro Spickzettel sind einstellbar. Käufe werden in der `order`-Tabelle gespeichert. Coin-Abzüge beim Download sowie spätere Aufladung per Stripe sind vorgesehen.
+: Überprüfung der Dateiendung `.pdf`, Lesen über `PyPDF2`, Extraktion der ersten Seite für Vorschau. Beim Upload wird die Datei als `Bytes` gespeichert und direkt in der Datenbank hinterlegt.
 
 ---
 
-## Coins in der Datenbank verwalten
+## Sicherer Login mit Passwort-Hashing
 
 **Goal Definition**  
-: Coins (Credits) sollen in der Datenbank erfasst und korrekt abgerechnet werden (Kauf, Download, Kontostand).
+: Passwörter dürfen nicht im Klartext gespeichert werden.
 
 **Umsetzung**  
-: Coins sind als Feld `credits` in der `user`-Tabelle hinterlegt. Bei jedem Kauf erfolgt ein Datenbankeintrag in `order` sowie ein Abzug der Coins. Noch offen: Stripe-Integration zur Coin-Aufladung.
+: Alle Passwörter werden beim Registrieren mit `werkzeug.security.generate_password_hash()` verschlüsselt. Beim Login erfolgt ein Abgleich mit `check_password_hash()`.
 
-# Zusätzlich (Additional)
-- Verification with phone number
-- Admin Accounts
-- Split code into multiple files -> for better readability
-- Stripe payment integration
+---
 
+## Trennung von GET- und POST-Requests
 
+**Goal Definition**  
+: Logik für Formularanzeige und -verarbeitung soll sauber getrennt werden.
 
+**Umsetzung**  
+: Bei Registrierung, Login, Upload etc. wird zwischen `GET` (Formular anzeigen) und `POST` (Daten verarbeiten) unterschieden. Fehlerbehandlung erfolgt jeweils im `POST`.
+
+---
+
+## Modulare Strukturierung mit Models
+
+**Goal Definition**  
+: Die Datenbank-Modelle sollen ausgelagert und übersichtlich strukturiert sein.
+
+**Umsetzung**  
+: Das Modell `User`, `Cheatsheet`, `UserCheatsheetAccess` wurde in ein separates Modul (`models.py`) ausgelagert. Damit bleibt die Hauptdatei schlank und besser wartbar.
+
+---
+
+## Schutz vor doppeltem Kauf
+
+**Goal Definition**  
+: Ein Nutzer soll ein Cheatsheet nicht mehrfach kaufen können.
+
+**Umsetzung**  
+: Vor jedem Kauf wird geprüft, ob bereits ein Eintrag in `user_cheatsheet_access` existiert. Falls ja, wird der Kauf unterbunden und eine Warnung angezeigt.
+
+---
+
+## Zugriffsschutz auf Admin-Seiten
+
+**Goal Definition**  
+: Nur Admins sollen Zugang zu bestimmten Funktionen und Seiten haben.
+
+**Umsetzung**  
+: Mit dem Decorator `@admin_required` wird geprüft, ob der aktuelle Nutzer eingeloggt und als `admin` gekennzeichnet ist. Sonst wird zur Startseite weitergeleitet.
+
+---
+
+## Datenbankstruktur automatisch initialisieren
+
+**Goal Definition**  
+: Die Datenbanktabellen sollen bei Serverstart automatisch angelegt werden, wenn sie nicht existieren.
+
+**Umsetzung**  
+: Beim Start der Flask-App wird innerhalb des `if __name__ == "__main__"`-Blocks `db.create_all()` ausgeführt. So wird die Datenbank bei Erststart erstellt.
+
+---

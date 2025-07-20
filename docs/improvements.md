@@ -81,3 +81,15 @@ Diese Informationen sollen:
 - Sicherstellen, dass README.md und evtl. Wiki vollständig & nachvollziehbar sind
 
 ---
+
+### 9. Mehr Nutzerrollen und Rechte
+- Unterschiedliche Rollen einführen, z. B. Admins, Moderatoren und normale Nutzer
+- So können Admins besondere Bereiche und Funktionen sehen und steuern
+
+---
+
+### 10. Bessere Fehlermeldungen
+- Schöne Seiten für Fehler wie „Seite nicht gefunden“ oder „Serverproblem“ machen
+- Klare und freundliche Meldungen anzeigen, wenn was schiefgeht
+- Fehler im Hintergrund speichern, damit wir sie leichter finden können
+
